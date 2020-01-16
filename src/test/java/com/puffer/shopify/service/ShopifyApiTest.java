@@ -27,19 +27,19 @@ public class ShopifyApiTest {
     @Test
     public void testHttp() throws IOException {
 
-        // String token = Base64Utils.encodeToString(("b04517be402f7e67a65e9e267926dcc9:e77c41384e1620a8d2b630ffd6260033").getBytes(UTF_8));
+        // String token = Base64Utils.encodeToString((":e77c41384e1620a8d2b630ffd6260033").getBytes(UTF_8));
 
-        String basic = Credentials.basic("b04517be402f7e67a65e9e267926dcc9", "e77c41384e1620a8d2b630ffd6260033");
+        String basic = Credentials.basic("", "e77c41384e1620a8d2b630ffd6260033");
 
         // OkHttpClient client = new OkHttpClient.Builder()
         //         .connectTimeout(10000L, TimeUnit.MILLISECONDS)
         //         .readTimeout(10000L, TimeUnit.MILLISECONDS)
         //         .build();
 
-        OkHttpClient client = buildBasicAuthClient("b04517be402f7e67a65e9e267926dcc9", "e77c41384e1620a8d2b630ffd6260033");
+        OkHttpClient client = buildBasicAuthClient("", "e77c41384e1620a8d2b630ffd6260033");
 
         // String url = shopifyProperties.sgetDomainUrl()+"/admin/api/2020-01/products.json";
-        String url = "https://gojeek.myshopify.com/admin/api/2020-01/products.json";
+        String url = "https://xx.myshopify.com/admin/api/2020-01/products.json";
 
         Request request = new Request.Builder()
                 .url(url)
