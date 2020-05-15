@@ -1,13 +1,17 @@
 package com.puffer.shopify.common.util;
 
+import com.google.common.collect.Maps;
 import com.puffer.core.exception.CommonExceptionCode;
+import okhttp3.Authenticator;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.Route;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,7 +22,12 @@ import java.util.concurrent.TimeUnit;
  * @since 1.0.0
  */
 public class ShopifyHttpUitl {
+
+    public static final okhttp3.MediaType TYPE_JSON = okhttp3.MediaType.parse("application/json; charset=utf-8");
+
     private static OkHttpClient httpClient;
+
+    private static final Map<String, OkHttpClient> authClientMap = Maps.newConcurrentMap();
 
     static {
         OkHttpClient.Builder builder = (new OkHttpClient.Builder()).connectTimeout(30000L, TimeUnit.MILLISECONDS).readTimeout(30000L, TimeUnit.MILLISECONDS);
@@ -38,6 +47,59 @@ public class ShopifyHttpUitl {
         } catch (IOException e) {
             throw CommonExceptionCode.BAD_PARAMETER.exception();
         }
+    }
+
+    /**
+     * 实例化一个okhttpClient客户端
+     *
+     * @param name
+     * @param password
+     * @return okhttp3.OkHttpClient
+     * @author puffer
+     * @date 2020年05月15日 09:32:22
+     * @since 9.3.4
+     */
+    public static OkHttpClient instanceBasicAuthClient(final String name, final String password) {
+        String key = buildKey(name, password);
+        if (authClientMap.containsKey(key)) {
+            return authClientMap.get(key);
+        }
+
+        return syncInstanceBasicAuthClient(name, password);
+    }
+
+    /**
+     * 同步锁 初始化okhttp
+     *
+     * @param name
+     * @param password
+     * @return okhttp3.OkHttpClient
+     * @author puffer
+     * @date 2020年05月15日 09:39:16
+     * @since 9.3.4
+     */
+    private static synchronized OkHttpClient syncInstanceBasicAuthClient(String name, String password) {
+
+        String key = buildKey(name, password);
+        if (authClientMap.containsKey(key)) {
+            return authClientMap.get(key);
+        }
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().authenticator(new Authenticator() {
+            @Override
+            public Request authenticate(Route route, Response response) throws IOException {
+                String credential = Credentials.basic(name, password);
+                return response.request().newBuilder().header("Authorization", credential).build();
+            }
+        }).build();
+
+        authClientMap.put(key, okHttpClient);
+
+        return okHttpClient;
+    }
+
+    private static String buildKey(String name, String password) {
+        return name.concat("-").concat(password);
     }
 
 }

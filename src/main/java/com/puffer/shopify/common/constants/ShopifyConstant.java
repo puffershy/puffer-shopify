@@ -11,4 +11,7 @@ public class ShopifyConstant {
 
     public static final String PAGE_REPONSE_HEADER_LINK = "link";
 
+
+    // public static final String
+
 }

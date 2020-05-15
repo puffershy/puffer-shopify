@@ -1,5 +1,6 @@
 package com.puffer.shopify.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ShopifyProduct {
     /**
      * 产品说明
      */
+    @JSONField(name="body_html")
     private String bodyHtml;
 
     /**
@@ -37,11 +39,13 @@ public class ShopifyProduct {
     /**
      * 用于过滤和搜索产品的产品的分类
      */
+    @JSONField(name = "product_type")
     private String productType;
 
     /**
      * 创建时间
      */
+    @JSONField(name = "create_at")
     private String createdAt;
 
     /**
@@ -54,17 +58,20 @@ public class ShopifyProduct {
     /**
      * 更新时间
      */
+    @JSONField(name = "updated_at")
     private String updateAt;
 
     /**
      * 发布时间
      */
+    @JSONField(name = "published_at")
     private String pulbishedAt;
 
     /**
      * 产品页面使用的Liquid模板的后缀。如果指定了此属性，那么产品页面将使用一个名为“ product.suffix.liquid”的模板，其中“ suffix”是此属性的值。
      * 如果此属性是""或null，那么产品页面将使用默认模板“ product.liquid”。（默认值：null
      */
+    @JSONField(name = "template_suffix")
     private String templateSuffix;
 
     /**
@@ -73,6 +80,7 @@ public class ShopifyProduct {
      * web：产品已发布到“在线商店”渠道，但未发布到“销售点”渠道。
      * global：产品同时发布到在线商店渠道和销售点渠道。
      */
+    @JSONField(name = "published_scope")
     private String publishedScope;
 
     /**
@@ -83,7 +91,9 @@ public class ShopifyProduct {
     /**
      *
      */
+    @JSONField(name = "admin_graphql_api_id")
     private String adminGraphqlApiId;
+
     private List<ShopifyVariant> variants;
 
     /**
@@ -95,5 +105,6 @@ public class ShopifyProduct {
      * 产品图像对象的 列表，每个代表与产品关联的图像。
      */
     private List<ShopifyImage> images;
+
     private ShopifyImage image;
 }

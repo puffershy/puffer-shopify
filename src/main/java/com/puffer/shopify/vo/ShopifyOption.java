@@ -1,9 +1,8 @@
 package com.puffer.shopify.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import java.util.List;
 @Data
 public class ShopifyOption {
     private String id;
+    @JSONField(name = "product_id")
     private String productId;
     private String name;
     private int position;
