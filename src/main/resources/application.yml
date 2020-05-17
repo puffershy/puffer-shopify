@@ -57,11 +57,12 @@ mybatis:
 
 jasypt:
   encryptor:
-    password:
+    password: A#E$#sdf123
 
 puffer:
   shopify:
     domain-url: https://doswarm-dev.myshopify.com
+    admin-api: /admin/api/2020-04
     private-auth:
       user-name: f5503e51af0b61af7f1c763712fbe787
       password: 042d99c6b431c481f339bf32e60547b9

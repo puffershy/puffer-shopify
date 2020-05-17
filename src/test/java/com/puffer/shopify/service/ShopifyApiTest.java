@@ -1,11 +1,10 @@
 package com.puffer.shopify.service;
 
-import okhttp3.Authenticator;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.Route;
+import com.alibaba.fastjson.JSON;
+import com.puffer.shopify.common.util.ShopifyHttpUitl;
+import com.puffer.shopify.vo.ShopifyProduct;
+import com.puffer.shopify.vo.ShopifyProductWrapper;
+import okhttp3.*;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 
@@ -25,21 +24,42 @@ public class ShopifyApiTest {
     // private ShopifyProperties shopifyProperties;
 
     @Test
+    public void testPost() throws IOException {
+        ShopifyProduct shopifyProduct = new ShopifyProduct();
+        shopifyProduct.setTitle("auto create product"+System.currentTimeMillis());
+        shopifyProduct.setBodyHtml("product description");
+        shopifyProduct.setVendor("Burton");
+        shopifyProduct.setProductType("auto test");
+
+        ShopifyProductWrapper shopifyProductWrapper = new ShopifyProductWrapper();
+        shopifyProductWrapper.setProduct(shopifyProduct);
+
+
+        OkHttpClient client = buildBasicAuthClient("f5503e51af0b61af7f1c763712fbe787", "042d99c6b431c481f339bf32e60547b9");
+
+
+        RequestBody requestBody = RequestBody.create(ShopifyHttpUitl.TYPE_JSON, JSON.toJSONString(shopifyProductWrapper));
+
+        String url = "https://doswarm-dev.myshopify.com/admin/api/2020-01/products.json";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .post(requestBody)
+                .build();
+        Response response = client.newCall(request).execute();
+
+        System.out.println(response.body().string());
+
+    }
+
+
+
+    @Test
     public void testHttp() throws IOException {
+        OkHttpClient client = buildBasicAuthClient("f5503e51af0b61af7f1c763712fbe787", "042d99c6b431c481f339bf32e60547b9");
 
-        // String token = Base64Utils.encodeToString(("name:password").getBytes(UTF_8));
-
-        String basic = Credentials.basic("", "");
-
-        // OkHttpClient client = new OkHttpClient.Builder()
-        //         .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-        //         .readTimeout(10000L, TimeUnit.MILLISECONDS)
-        //         .build();
-
-        OkHttpClient client = buildBasicAuthClient("", "");
-
-        // String url = shopifyProperties.sgetDomainUrl()+"/admin/api/2020-01/products.json";
-        String url = "https://****.myshopify.com/admin/api/2020-01/products.json";
+        String url = "https://doswarm-dev.myshopify.com/admin/api/2020-01/products.json";
 
         Request request = new Request.Builder()
                 .url(url)
@@ -55,7 +75,7 @@ public class ShopifyApiTest {
 
 
     public OkHttpClient buildBasicAuthClient(final String name, final String password) {
-        return new OkHttpClient.Builder().authenticator(new Authenticator() {
+        return new OkHttpClient.Builder().readTimeout(30000,TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 String credential = Credentials.basic(name, password);

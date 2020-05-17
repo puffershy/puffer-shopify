@@ -1,4 +1,4 @@
-package com.puffer.shopify.mapper;
-
-public interface ProductMapper {
-}
+//package com.puffer.shopify.mapper;
+//
+//public interface ProductMapper {
+//}

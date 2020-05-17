@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
  * @since 1.0.0
  */
 
-@Data
 @Validated
 @ConfigurationProperties(prefix = "puffer.shopify")
 public class ShopifyProperties {
@@ -24,7 +23,35 @@ public class ShopifyProperties {
     private String domainUrl;
 
     @NotNull
+    private String adminApi;
+
+    @NotNull
     private PrivateAuth privateAuth;
+
+    public String getDomainUrl() {
+        return domainUrl;
+    }
+
+    public void setDomainUrl(String domainUrl) {
+        this.domainUrl = domainUrl;
+    }
+
+    public String getAdminApi() {
+//        return adminApi;
+        return getDomainUrl().concat(adminApi);
+    }
+
+    public void setAdminApi(String adminApi) {
+        this.adminApi = adminApi;
+    }
+
+    public PrivateAuth getPrivateAuth() {
+        return privateAuth;
+    }
+
+    public void setPrivateAuth(PrivateAuth privateAuth) {
+        this.privateAuth = privateAuth;
+    }
 
     @Data
     public static class PrivateAuth {
@@ -34,4 +61,7 @@ public class ShopifyProperties {
         @NotBlank
         private String password;
     }
+
+
+
 }
