@@ -61,7 +61,7 @@ jasypt:
 
 puffer:
   shopify:
-    domain-url: doswarm-dev.myshopify.com
+    domain-url: https://doswarm-dev.myshopify.com
     private-auth:
       user-name: f5503e51af0b61af7f1c763712fbe787
       password: 042d99c6b431c481f339bf32e60547b9
