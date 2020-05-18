@@ -19,7 +19,7 @@ public class ShopifyUrlConstant {
      * GET /admin/api/2020-04/products/count.json
      * Retrieves a count of products
      *
-     * @author buyi
+     * @author puffer
      * @date 2020年05月18日 17:23:38
      * @param null
      * @return
