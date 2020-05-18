@@ -1,5 +1,7 @@
 package com.puffer.shopify.service;
+import com.puffer.shopify.vo.shopify.SaveProductVO;
 
+import com.puffer.shopify.entity.AmazonItemEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,4 +13,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ShopifyProductService {
+
+    public void saveProduct(AmazonItemEntity amazonItem){
+        SaveProductVO shopifyProduct = buildSaveProductVO(amazonItem);
+
+    }
+
+    private SaveProductVO buildSaveProductVO(AmazonItemEntity amazonItem) {
+
+        return null;
+    }
+
 }
