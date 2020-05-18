@@ -13,9 +13,20 @@
       #{flowState,jdbcType=TINYINT}, #{state,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+    <update id="updateProductId">
+        update set product_id = #{productId} where spu = #{spu}
+    </update>
+    <update id="updateState">
+        update set state = #{state}   where spu = #{spu}
+    </update>
     <select id="queryByProductId" resultType="com.puffer.shopify.entity.ProductEntity">
         select
         <include refid="Base_Column_List"/>
         from tb_product where product_id = #{productId}
+    </select>
+    <select id="queryList" resultType="com.puffer.shopify.entity.ProductEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_product where state = #{state} limit #{index},#{size}
     </select>
 </mapper>
