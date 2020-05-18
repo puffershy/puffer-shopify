@@ -16,7 +16,6 @@ import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -38,11 +37,11 @@ public class ShopiftHttpService {
     private static Pattern pattern = Pattern.compile("<(.*?)>");
     private static Pattern relPattern = Pattern.compile("\\\"([^\\\"]*)\\\"");
 
-    @Resource
-    private RestTemplate restTemplate;
-
-//    @Resource
-//    private ProductMapper productMapper;
+//     @Resource
+    //     private RestTemplate restTemplate;
+    //
+    // //    @Resource
+    // //    private ProductMapper productMapper;
 
     @Resource
     private ShopifyProperties shopifyProperties;

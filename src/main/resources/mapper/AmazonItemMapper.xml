@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puffer.shopify.mapper.AmazonItemMapper">
+  <sql id="Base_Column_List">
+    id AS id, spu AS spu, type AS type, title AS title, orig_price AS origPrice, url AS url, 
+    rank AS rank, create_time AS createTime, update_time AS updateTime
+  </sql>
+  <insert id="insert" parameterType="com.puffer.shopify.entity.AmazonItemEntity">
+    insert into tb_amazon_item (id, spu, type, 
+      title, orig_price, url, 
+      rank, create_time, update_time, 
+      description)
+    values (#{id,jdbcType=INTEGER}, #{spu,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{origPrice,jdbcType=DECIMAL}, #{url,jdbcType=VARCHAR}, 
+      #{rank,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{description,jdbcType=LONGVARCHAR})
+  </insert>
+</mapper>

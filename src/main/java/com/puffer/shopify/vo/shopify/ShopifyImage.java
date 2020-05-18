@@ -1,4 +1,4 @@
-package com.puffer.shopify.vo;
+package com.puffer.shopify.vo.shopify;
 
 import lombok.Data;
 

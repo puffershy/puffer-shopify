@@ -2,8 +2,8 @@ package com.puffer.shopify.service;
 
 import com.alibaba.fastjson.JSON;
 import com.puffer.shopify.common.util.ShopifyHttpUitl;
-import com.puffer.shopify.vo.ShopifyProduct;
-import com.puffer.shopify.vo.ShopifyProductWrapper;
+import com.puffer.shopify.vo.shopify.ShopifyProduct;
+import com.puffer.shopify.vo.shopify.ShopifyProductWrapper;
 import okhttp3.*;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
