@@ -1,6 +1,8 @@
 package com.puffer.shopify.common.util;
 
 import com.puffer.shopify.common.constants.PatternConstants;
+import com.puffer.shopify.entity.ProductImageDO;
+import com.puffer.shopify.entity.ProductRankDO;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import us.codecraft.webmagic.Page;
@@ -42,8 +44,20 @@ public class AmazonPageUtil {
      */
     private static final String VARIANT_XPATH = "//*[@id=\"variation_color_name\"]";
 
-    // private static final String BEST_SELLER_RANK_XPATH = "//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/th[contains(text(),\"Best Sellers Rank\")/following-sibling::*[1]/span";
-    private static final String BEST_SELLER_RANK_XPATH = "//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/th[contains(text(),\"Best Sellers Rank\")";
+    /**
+     * 排行版
+     */
+    private static final String BEST_SELLER_RANK_XPATH = "//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr/td/span/span/allText()";
+
+    /**
+     * 描述
+     */
+    private static final String DESCRIPTION_XPATH = "///*[@id=\"feature-bullets\"]/html()";
+
+    /**
+     * 图片
+     */
+    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
 
     /**
      * 获取所有产品的连接
@@ -121,16 +135,70 @@ public class AmazonPageUtil {
         return page.getUrl().regex(PatternConstants.SPU).toString();
     }
 
-    public static String queryRank(Page page) {
 
-        String s1 = page.getHtml().xpath("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr[8]/th").toString();
-        String s = page.getHtml().xpath("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr/th[contains(text(),\"Best Sellers Rank\")").toString();
-        // List<String> all = page.getHtml().xpath(BEST_SELLER_RANK_XPATH).all();
-        // System.out.println(all);
-        return null;
+    /**
+     * 获取排行榜
+     *
+     * @param page
+     * @param spu
+     * @return java.util.List<com.puffer.shopify.entity.ProductRankDO>
+     * @author puffer
+     * @date 2020年05月22日 00:25:59
+     * @since 1.0.0
+     */
+
+    public static List<ProductRankDO> queryRank(Page page, String spu) {
+
+        List<ProductRankDO> list = Lists.newArrayList();
+
+        List<String> all = page.getHtml().xpath(BEST_SELLER_RANK_XPATH).all();
+
+        int endIndex;
+        String tmp = "";
+        int splitIndex;
+
+        for (String s : all) {
+            tmp = s.replace("#", "");
+
+            endIndex = tmp.length();
+            int i = s.indexOf("(");
+            if (i > 0) {
+                endIndex = i;
+            }
+
+            splitIndex = tmp.indexOf("in");
+
+            ProductRankDO productRankDO = new ProductRankDO();
+            productRankDO.setSpu(spu);
+            productRankDO.setRank(Integer.valueOf(tmp.substring(0, splitIndex).trim()));
+            productRankDO.setRankType(s.substring(splitIndex + 3, endIndex).trim());
+
+            list.add(productRankDO);
+
+        }
+
+        return list;
     }
 
     public static String queryDescription(Page page) {
-        return null;
+        return page.getHtml().xpath(DESCRIPTION_XPATH).toString();
+    }
+
+    public static void main(String[] args) {
+
+    }
+
+    public static List<ProductImageDO> queryImage(Page page, String spu) {
+        List<ProductImageDO> list =Lists.newArrayList();
+
+        String imageUrl = page.getHtml().xpath(IMAGE_XPATH).toString();
+        ProductImageDO productImageDO = new ProductImageDO();
+        productImageDO.setSpu(spu);
+        productImageDO.setImageUrl(imageUrl);
+
+        list.add(productImageDO);
+
+
+        return list;
     }
 }

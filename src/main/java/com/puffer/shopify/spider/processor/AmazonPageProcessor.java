@@ -3,6 +3,10 @@ package com.puffer.shopify.spider.processor;
 import com.puffer.shopify.common.constants.PatternConstants;
 import com.puffer.shopify.common.util.AmazonPageUtil;
 import com.puffer.shopify.common.util.PatterUtil;
+import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.entity.ProductImageDO;
+import com.puffer.shopify.entity.ProductRankDO;
+import com.puffer.shopify.vo.ProductVO;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import us.codecraft.webmagic.Page;
@@ -46,6 +50,25 @@ public class AmazonPageProcessor implements PageProcessor {
     }
 
     private void buildProduct(Page page) {
+        //step1. 构建产品信息
+        ProductDO productDO = buildProductDO(page);
+        if (productDO == null) {
+            return;
+        }
+
+
+        //step2. 构建产品排行
+        List<ProductRankDO> productRankDOS = AmazonPageUtil.queryRank(page, productDO.getSpu());
+
+        //step3. 构架产品图片
+        List<ProductImageDO> productImageDOS = AmazonPageUtil.queryImage(page, productDO.getSpu());
+
+
+        ProductVO productVO = ProductVO.builder().productDO(productDO).productImageDOList(productImageDOS).productRankDOList(productRankDOS).build();
+        page.putField("productVO", productVO);
+    }
+
+    private ProductDO buildProductDO(Page page) {
         String title = AmazonPageUtil.queryTitle(page);
         String url = page.getUrl().toString();
         String spu = AmazonPageUtil.querySpu(page);
@@ -54,27 +77,26 @@ public class AmazonPageProcessor implements PageProcessor {
 
         if (StringUtils.isBlank(title)) {
             page.setSkip(true);
-            return;
+            return null;
         }
 
-        AmazonPageUtil.queryRank(page);
+        ProductDO productDO = new ProductDO();
+        productDO.setSpu(spu);
+        productDO.setType("mug");
+        productDO.setTitle(title);
+        productDO.setAmazonPrice(price);
+        productDO.setUrl(url);
+//        productDO.setShopifyPrice();
+//        productDO.setProductId();
+//        productDO.setFlowState();
+//        productDO.setState();
+//        productDO.setCreateTime();
+//        productDO.setUpdateTime();
+        productDO.setDescription(description);
 
-        // page.putField("title", title);
+        return productDO;
     }
 
-    // private String getPrice(Page page) {
-    //     List<String> xpahtList = Lists.newArrayList();
-    //     xpahtList.add("//*[@id=\"priceblock_ourprice\"]/text()");
-    //     xpahtList.add("//*[@id=\"priceblock_saleprice\"]/text()");
-    //     String price = "";
-    //     for (String xpath : xpahtList) {
-    //         price = page.getHtml().xpath(xpath).toString();
-    //         if (StringUtils.isNotBlank(price)) {
-    //             return price;
-    //         }
-    //     }
-    //     return "";
-    // }
 
     private String getRank(Page page) {
         List<String> xpahtList = Lists.newArrayList();

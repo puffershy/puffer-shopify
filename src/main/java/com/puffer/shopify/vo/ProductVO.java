@@ -4,6 +4,7 @@ import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.entity.ProductVariantDO;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @date 2020年05月21日 19:00:22
  * @since 1.0.0
  */
+@Builder
 @Data
 public class ProductVO {
 
