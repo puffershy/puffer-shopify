@@ -38,6 +38,13 @@ public class AmazonPageUtil {
     private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
 
     /**
+     * 变体
+     */
+    private static final String VARIANT_XPATH = "//*[@id=\"variation_color_name\"]";
+
+
+
+    /**
      * 获取所有产品的连接
      *
      * @param page
