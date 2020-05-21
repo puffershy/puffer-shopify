@@ -57,6 +57,8 @@ public class AmazonPageProcessor implements PageProcessor {
             return;
         }
 
+        AmazonPageUtil.queryRank(page);
+
         // page.putField("title", title);
     }
 

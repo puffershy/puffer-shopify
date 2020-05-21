@@ -42,7 +42,8 @@ public class AmazonPageUtil {
      */
     private static final String VARIANT_XPATH = "//*[@id=\"variation_color_name\"]";
 
-
+    // private static final String BEST_SELLER_RANK_XPATH = "//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/th[contains(text(),\"Best Sellers Rank\")/following-sibling::*[1]/span";
+    private static final String BEST_SELLER_RANK_XPATH = "//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/th[contains(text(),\"Best Sellers Rank\")";
 
     /**
      * 获取所有产品的连接
@@ -95,6 +96,7 @@ public class AmazonPageUtil {
     public static BigDecimal queryPrice(Page page) {
         String price = "";
         for (String xpath : PRICE_XPAHT) {
+
             String str = page.getHtml().xpath(xpath).toString();
             if (StringUtils.isNotBlank(str)) {
                 price = str;
@@ -120,6 +122,11 @@ public class AmazonPageUtil {
     }
 
     public static String queryRank(Page page) {
+
+        String s1 = page.getHtml().xpath("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr[8]/th").toString();
+        String s = page.getHtml().xpath("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr/th[contains(text(),\"Best Sellers Rank\")").toString();
+        // List<String> all = page.getHtml().xpath(BEST_SELLER_RANK_XPATH).all();
+        // System.out.println(all);
         return null;
     }
 
