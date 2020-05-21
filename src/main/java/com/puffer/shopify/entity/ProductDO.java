@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AmazonItemEntity {
+public class ProductDO {
     /**
      * 商品id
      */
@@ -27,9 +27,9 @@ public class AmazonItemEntity {
     private String title;
 
     /**
-     * 价格，单位：美元
+     * 亚马逊价格，单位：美元
      */
-    private BigDecimal origPrice;
+    private BigDecimal amazonPrice;
 
     /**
      * 商品URL
@@ -37,9 +37,24 @@ public class AmazonItemEntity {
     private String url;
 
     /**
-     * 最新排名
+     * 价格，单位：美元
      */
-    private Integer rank;
+    private BigDecimal shopifyPrice;
+
+    /**
+     * shopify 产品id
+     */
+    private String productId;
+
+    /**
+     * 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
+     */
+    private Byte flowState;
+
+    /**
+     * 有效状态，0-无效，1-有效
+     */
+    private Byte state;
 
     /**
      * 创建时间
@@ -129,21 +144,21 @@ public class AmazonItemEntity {
     }
 
     /**
-     * 价格，单位：美元
+     * 亚马逊价格，单位：美元
      *
-     * @return orig_price 价格，单位：美元
+     * @return amazon_price 亚马逊价格，单位：美元
      */
-    public BigDecimal getOrigPrice() {
-        return origPrice;
+    public BigDecimal getAmazonPrice() {
+        return amazonPrice;
     }
 
     /**
-     * 价格，单位：美元
+     * 亚马逊价格，单位：美元
      *
-     * @param origPrice orig_price 
+     * @param amazonPrice amazon_price 
      */
-    public void setOrigPrice(BigDecimal origPrice) {
-        this.origPrice = origPrice;
+    public void setAmazonPrice(BigDecimal amazonPrice) {
+        this.amazonPrice = amazonPrice;
     }
 
     /**
@@ -165,21 +180,75 @@ public class AmazonItemEntity {
     }
 
     /**
-     * 最新排名
+     * 价格，单位：美元
      *
-     * @return rank 最新排名
+     * @return shopify_price 价格，单位：美元
      */
-    public Integer getRank() {
-        return rank;
+    public BigDecimal getShopifyPrice() {
+        return shopifyPrice;
     }
 
     /**
-     * 最新排名
+     * 价格，单位：美元
      *
-     * @param rank rank 
+     * @param shopifyPrice shopify_price 
      */
-    public void setRank(Integer rank) {
-        this.rank = rank;
+    public void setShopifyPrice(BigDecimal shopifyPrice) {
+        this.shopifyPrice = shopifyPrice;
+    }
+
+    /**
+     * shopify 产品id
+     *
+     * @return product_id shopify 产品id
+     */
+    public String getProductId() {
+        return productId;
+    }
+
+    /**
+     * shopify 产品id
+     *
+     * @param productId product_id 
+     */
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    /**
+     * 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
+     *
+     * @return flow_state 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
+     */
+    public Byte getFlowState() {
+        return flowState;
+    }
+
+    /**
+     * 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
+     *
+     * @param flowState flow_state 
+     */
+    public void setFlowState(Byte flowState) {
+        this.flowState = flowState;
+    }
+
+    /**
+     * 有效状态，0-无效，1-有效
+     *
+     * @return state 有效状态，0-无效，1-有效
+     */
+    public Byte getState() {
+        return state;
+    }
+
+    /**
+     * 有效状态，0-无效，1-有效
+     *
+     * @param state state 
+     */
+    public void setState(Byte state) {
+        this.state = state;
     }
 
     /**

@@ -24,7 +24,7 @@ public class ShopifyUrlConstant {
      * @param null
      * @return
      * @return null
-     * @since 9.3.4
+     * @since 1.0.0
      */
     public static final String PRODUCT_COUNT = "/products/count.json";
 

@@ -1,25 +1,25 @@
 package com.puffer.shopify.service;
-import com.puffer.shopify.vo.shopify.SaveProductVO;
 
-import com.puffer.shopify.entity.AmazonItemEntity;
+import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.vo.shopify.SaveProductVO;
 import org.springframework.stereotype.Service;
 
 /**
  * shopify产品服务
  *
- * @author buyi
+ * @author puffer
  * @date 2020年05月18日 17:20:10
  * @since 1.0.0
  */
 @Service
 public class ShopifyProductService {
 
-    public void saveProduct(AmazonItemEntity amazonItem){
-        SaveProductVO shopifyProduct = buildSaveProductVO(amazonItem);
+    public void saveProduct(ProductDO productDO) {
+        SaveProductVO shopifyProduct = buildSaveProductVO(productDO);
 
     }
 
-    private SaveProductVO buildSaveProductVO(AmazonItemEntity amazonItem) {
+    private SaveProductVO buildSaveProductVO(ProductDO productDO) {
 
         return null;
     }

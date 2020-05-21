@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 保存产品请求参数
  *
- * @author buyi
+ * @author puffer
  * @date 2020年05月18日 19:27:22
  * @since 1.0.0
  */

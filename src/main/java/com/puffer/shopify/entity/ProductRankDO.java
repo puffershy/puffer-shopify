@@ -4,9 +4,9 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ProductImageEntity {
+public class ProductRankDO {
     /**
-     * 商品id
+     * 自增主键
      */
     private Integer id;
 
@@ -16,31 +16,31 @@ public class ProductImageEntity {
     private String spu;
 
     /**
-     * 图片地址
+     * 排名类型
      */
-    private String imageUrl;
+    private String rankType;
+
+    /**
+     * 排名
+     */
+    private Integer rank;
 
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date create;
 
     /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 商品id
+     * 自增主键
      *
-     * @return id 商品id
+     * @return id 自增主键
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 商品id
+     * 自增主键
      *
      * @param id id 
      */
@@ -67,57 +67,57 @@ public class ProductImageEntity {
     }
 
     /**
-     * 图片地址
+     * 排名类型
      *
-     * @return image_url 图片地址
+     * @return rank_type 排名类型
      */
-    public String getImageUrl() {
-        return imageUrl;
+    public String getRankType() {
+        return rankType;
     }
 
     /**
-     * 图片地址
+     * 排名类型
      *
-     * @param imageUrl image_url 
+     * @param rankType rank_type 
      */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
+    public void setRankType(String rankType) {
+        this.rankType = rankType == null ? null : rankType.trim();
+    }
+
+    /**
+     * 排名
+     *
+     * @return rank 排名
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * 排名
+     *
+     * @param rank rank 
+     */
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     /**
      * 创建时间
      *
-     * @return create_time 创建时间
+     * @return create 创建时间
      */
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreate() {
+        return create;
     }
 
     /**
      * 创建时间
      *
-     * @param createTime create_time 
+     * @param create create 
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * 更新时间
-     *
-     * @return update_time 更新时间
-     */
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    /**
-     * 更新时间
-     *
-     * @param updateTime update_time 
-     */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreate(Date create) {
+        this.create = create;
     }
 
     @Override

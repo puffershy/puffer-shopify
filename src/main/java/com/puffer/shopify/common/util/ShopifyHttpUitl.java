@@ -57,7 +57,7 @@ public class ShopifyHttpUitl {
      * @return okhttp3.OkHttpClient
      * @author puffer
      * @date 2020年05月15日 09:32:22
-     * @since 9.3.4
+     * @since 1.0.0
      */
     public static OkHttpClient instanceBasicAuthClient(final String name, final String password) {
         String key = buildKey(name, password);
@@ -76,7 +76,7 @@ public class ShopifyHttpUitl {
      * @return okhttp3.OkHttpClient
      * @author puffer
      * @date 2020年05月15日 09:39:16
-     * @since 9.3.4
+     * @since 1.0.0
      */
     private static synchronized OkHttpClient syncInstanceBasicAuthClient(String name, String password) {
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puffer.shopify.mapper.ProductVariantDao">
+  <sql id="Base_Column_List">
+    id AS id, spu AS spu, key AS key, value AS value, image_url AS imageUrl, create AS create
+  </sql>
+  <insert id="insert" parameterType="com.puffer.shopify.entity.ProductVariantDO">
+    insert into tb_product_variant (id, spu, key, 
+      value, image_url, create
+      )
+    values (#{id,jdbcType=INTEGER}, #{spu,jdbcType=VARCHAR}, #{key,jdbcType=VARCHAR}, 
+      #{value,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, #{create,jdbcType=TIMESTAMP}
+      )
+  </insert>
+</mapper>
