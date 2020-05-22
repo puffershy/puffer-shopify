@@ -49,12 +49,12 @@ public class ProductDO {
     /**
      * 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
      */
-    private Byte flowState;
+    private Integer flowState;
 
     /**
      * 有效状态，0-无效，1-有效
      */
-    private Byte state;
+    private Integer state;
 
     /**
      * 创建时间
@@ -220,7 +220,7 @@ public class ProductDO {
      *
      * @return flow_state 流程状态，0-待上传产品，1-待上传图片，2-待添加集合
      */
-    public Byte getFlowState() {
+    public Integer getFlowState() {
         return flowState;
     }
 
@@ -229,7 +229,7 @@ public class ProductDO {
      *
      * @param flowState flow_state 
      */
-    public void setFlowState(Byte flowState) {
+    public void setFlowState(Integer flowState) {
         this.flowState = flowState;
     }
 
@@ -238,7 +238,7 @@ public class ProductDO {
      *
      * @return state 有效状态，0-无效，1-有效
      */
-    public Byte getState() {
+    public Integer getState() {
         return state;
     }
 
@@ -247,7 +247,7 @@ public class ProductDO {
      *
      * @param state state 
      */
-    public void setState(Byte state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

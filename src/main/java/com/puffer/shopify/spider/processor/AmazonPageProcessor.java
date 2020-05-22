@@ -1,6 +1,8 @@
 package com.puffer.shopify.spider.processor;
 
 import com.puffer.shopify.common.constants.PatternConstants;
+import com.puffer.shopify.common.enums.ProductFlowStateEnum;
+import com.puffer.shopify.common.enums.YesNoEnum;
 import com.puffer.shopify.common.util.AmazonPageUtil;
 import com.puffer.shopify.common.util.PatterUtil;
 import com.puffer.shopify.entity.ProductDO;
@@ -56,13 +58,11 @@ public class AmazonPageProcessor implements PageProcessor {
             return;
         }
 
-
         //step2. 构建产品排行
         List<ProductRankDO> productRankDOS = AmazonPageUtil.queryRank(page, productDO.getSpu());
 
         //step3. 构架产品图片
         List<ProductImageDO> productImageDOS = AmazonPageUtil.queryImage(page, productDO.getSpu());
-
 
         ProductVO productVO = ProductVO.builder().productDO(productDO).productImageDOList(productImageDOS).productRankDOList(productRankDOS).build();
         page.putField("productVO", productVO);
@@ -86,17 +86,16 @@ public class AmazonPageProcessor implements PageProcessor {
         productDO.setTitle(title);
         productDO.setAmazonPrice(price);
         productDO.setUrl(url);
-//        productDO.setShopifyPrice();
-//        productDO.setProductId();
-//        productDO.setFlowState();
-//        productDO.setState();
-//        productDO.setCreateTime();
-//        productDO.setUpdateTime();
+        //        productDO.setShopifyPrice();
+        //        productDO.setProductId();
+        productDO.setFlowState(ProductFlowStateEnum.TO_UPLOAD.getValue());
+        productDO.setState(YesNoEnum.YES.getValue());
+        //        productDO.setCreateTime();
+        //        productDO.setUpdateTime();
         productDO.setDescription(description);
 
         return productDO;
     }
-
 
     private String getRank(Page page) {
         List<String> xpahtList = Lists.newArrayList();

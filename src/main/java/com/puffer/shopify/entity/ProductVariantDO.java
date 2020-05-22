@@ -1,8 +1,9 @@
 package com.puffer.shopify.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 public class ProductVariantDO {
     /**
@@ -30,6 +31,8 @@ public class ProductVariantDO {
      */
     private String imageUrl;
 
+    private String attachment;
+
     /**
      * 创建时间
      */
@@ -47,7 +50,7 @@ public class ProductVariantDO {
     /**
      * 自增主键
      *
-     * @param id id 
+     * @param id id
      */
     public void setId(Integer id) {
         this.id = id;
@@ -65,7 +68,7 @@ public class ProductVariantDO {
     /**
      * 商品唯一编码
      *
-     * @param spu spu 
+     * @param spu spu
      */
     public void setSpu(String spu) {
         this.spu = spu == null ? null : spu.trim();
@@ -83,7 +86,7 @@ public class ProductVariantDO {
     /**
      * 关键词
      *
-     * @param key key 
+     * @param key key
      */
     public void setKey(String key) {
         this.key = key == null ? null : key.trim();
@@ -101,7 +104,7 @@ public class ProductVariantDO {
     /**
      * 值
      *
-     * @param value value 
+     * @param value value
      */
     public void setValue(Integer value) {
         this.value = value;
@@ -119,10 +122,18 @@ public class ProductVariantDO {
     /**
      * 图片地址
      *
-     * @param imageUrl image_url 
+     * @param imageUrl image_url
      */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl == null ? null : imageUrl.trim();
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     /**
@@ -137,7 +148,7 @@ public class ProductVariantDO {
     /**
      * 创建时间
      *
-     * @param create create 
+     * @param create create
      */
     public void setCreate(Date create) {
         this.create = create;

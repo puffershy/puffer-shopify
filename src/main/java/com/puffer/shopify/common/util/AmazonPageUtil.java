@@ -135,7 +135,6 @@ public class AmazonPageUtil {
         return page.getUrl().regex(PatternConstants.SPU).toString();
     }
 
-
     /**
      * 获取排行榜
      *
@@ -174,7 +173,6 @@ public class AmazonPageUtil {
             productRankDO.setRankType(s.substring(splitIndex + 3, endIndex).trim());
 
             list.add(productRankDO);
-
         }
 
         return list;
@@ -189,15 +187,19 @@ public class AmazonPageUtil {
     }
 
     public static List<ProductImageDO> queryImage(Page page, String spu) {
-        List<ProductImageDO> list =Lists.newArrayList();
+        List<ProductImageDO> list = Lists.newArrayList();
 
-        String imageUrl = page.getHtml().xpath(IMAGE_XPATH).toString();
+        String content = page.getHtml().xpath(IMAGE_XPATH).toString();
         ProductImageDO productImageDO = new ProductImageDO();
         productImageDO.setSpu(spu);
-        productImageDO.setImageUrl(imageUrl);
+
+        if (content.startsWith("http")) {
+            productImageDO.setImageUrl(content);
+        } else {
+            productImageDO.setAttachment(content.trim());
+        }
 
         list.add(productImageDO);
-
 
         return list;
     }

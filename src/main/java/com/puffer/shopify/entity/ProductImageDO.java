@@ -1,8 +1,9 @@
 package com.puffer.shopify.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 public class ProductImageDO {
     /**
@@ -19,6 +20,11 @@ public class ProductImageDO {
      * 图片地址
      */
     private String imageUrl;
+
+    /**
+     * 图片base64
+     */
+    private String attachment;
 
     /**
      * 创建时间
@@ -42,7 +48,7 @@ public class ProductImageDO {
     /**
      * 商品id
      *
-     * @param id id 
+     * @param id id
      */
     public void setId(Integer id) {
         this.id = id;
@@ -60,7 +66,7 @@ public class ProductImageDO {
     /**
      * 商品唯一编码
      *
-     * @param spu spu 
+     * @param spu spu
      */
     public void setSpu(String spu) {
         this.spu = spu == null ? null : spu.trim();
@@ -78,7 +84,7 @@ public class ProductImageDO {
     /**
      * 图片地址
      *
-     * @param imageUrl image_url 
+     * @param imageUrl image_url
      */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl == null ? null : imageUrl.trim();
@@ -96,7 +102,7 @@ public class ProductImageDO {
     /**
      * 创建时间
      *
-     * @param createTime create_time 
+     * @param createTime create_time
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -114,10 +120,18 @@ public class ProductImageDO {
     /**
      * 更新时间
      *
-     * @param updateTime update_time 
+     * @param updateTime update_time
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     @Override
