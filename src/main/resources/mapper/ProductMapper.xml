@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.puffer.shopify.mapper.ProductDao">
     <sql id="Base_Column_List">
-    id AS id, spu AS spu, type AS type, title AS title, description AS description, amazon_price AS amazonPrice,
-    url AS url, shopify_price AS shopifyPrice, product_id AS productId, flow_state AS flowState, 
+    id AS id, spu AS spu, type AS type, material AS material, title AS title, description AS description, amazon_price AS amazonPrice,
+    url AS url, shopify_price AS shopifyPrice, product_id AS productId, free_shipping AS freeShipping, flow_state AS flowState,
     state AS state, create_time AS createTime, update_time AS updateTime
   </sql>
 
     <insert id="insert" parameterType="com.puffer.shopify.entity.ProductDO">
-    insert into tb_product (spu, type,
-      title, amazon_price, url,
+    insert into tb_product (spu, type, material,
+      title, amazon_price, url,free_shipping,
        flow_state,
       state,      description)
-    values (#{spu,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
-      #{title,jdbcType=VARCHAR}, #{amazonPrice,jdbcType=DECIMAL}, #{url,jdbcType=VARCHAR}, 
+    values (#{spu,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{material},
+      #{title,jdbcType=VARCHAR}, #{amazonPrice,jdbcType=DECIMAL}, #{url,jdbcType=VARCHAR}, #{freeShipping},
       #{flowState,jdbcType=TINYINT},
       #{state,jdbcType=TINYINT},       #{description,jdbcType=LONGVARCHAR})
   </insert>

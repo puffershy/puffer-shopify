@@ -1,8 +1,11 @@
 package com.puffer.shopify.common.util;
 
+import com.puffer.core.log.Log;
+import com.puffer.shopify.common.constants.AmazonConstant;
 import com.puffer.shopify.common.constants.PatternConstants;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import us.codecraft.webmagic.Page;
@@ -17,6 +20,7 @@ import java.util.List;
  * @date 2020年05月21日 19:25:49
  * @since 1.0.0
  */
+@Slf4j
 public class AmazonPageUtil {
 
     /**
@@ -37,7 +41,14 @@ public class AmazonPageUtil {
     /**
      * 产品价格
      */
-    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
+//    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
+    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"price_inside_buybox\"]/text()");
+
+
+    /**
+     * 是否包邮
+     */
+    private static final String FREE_SHIPPING_XPAHT = "//*[@id=\"price-shipping-message\"]/b/text() | //*[@id=\"shippingMessageInsideBuyBox_feature_div\"]/div/div/div/span/b/text()";
 
     /**
      * 变体
@@ -52,7 +63,8 @@ public class AmazonPageUtil {
     /**
      * 描述
      */
-    private static final String DESCRIPTION_XPATH = "///*[@id=\"feature-bullets\"]/html()";
+    private static final String DESCRIPTION_XPATH = "//*[@id=\"feature-bullets\"]/ul/li/allText()";
+
 
     /**
      * 图片
@@ -118,7 +130,13 @@ public class AmazonPageUtil {
             }
         }
 
-        price = price.replace("$", "");
+        if (StringUtils.isBlank(price)) {
+            log.info(Log.newInstance("", "价格为空，跳过").kv("url", page.getUrl().toString()).toString());
+            return null;
+        }
+
+
+        price = price.replace("$", "").trim();
         return new BigDecimal(price);
     }
 
@@ -169,7 +187,7 @@ public class AmazonPageUtil {
 
             ProductRankDO productRankDO = new ProductRankDO();
             productRankDO.setSpu(spu);
-            productRankDO.setRank(Integer.valueOf(tmp.substring(0, splitIndex).trim()));
+            productRankDO.setRank(Integer.valueOf(tmp.substring(0, splitIndex).trim().replace(",", "")));
             productRankDO.setRankType(s.substring(splitIndex + 3, endIndex).trim());
 
             list.add(productRankDO);
@@ -178,13 +196,46 @@ public class AmazonPageUtil {
         return list;
     }
 
+    /**
+     * 获取描述
+     *
+     * @param page
+     * @return java.lang.String
+     * @author puffer
+     * @date 2020年05月22日 23:05:59
+     * @since 1.0.0
+     */
+
     public static String queryDescription(Page page) {
-        return page.getHtml().xpath(DESCRIPTION_XPATH).toString();
+
+        StringBuilder builder = new StringBuilder();
+        List<String> all = page.getHtml().xpath(DESCRIPTION_XPATH).all();
+        for (int i = 0; i < all.size(); i++) {
+            if (i == 0) {
+                continue;
+            }
+
+            builder.append(all.get(i)).append("\n");
+        }
+
+        return builder.toString();
     }
 
     public static void main(String[] args) {
 
     }
+
+
+    /**
+     * 图片信息
+     *
+     * @param page
+     * @param spu
+     * @return java.util.List<com.puffer.shopify.entity.ProductImageDO>
+     * @author puffer
+     * @date 2020年05月23日 15:06:10
+     * @since 1.0.0
+     */
 
     public static List<ProductImageDO> queryImage(Page page, String spu) {
         List<ProductImageDO> list = Lists.newArrayList();
@@ -202,5 +253,24 @@ public class AmazonPageUtil {
         list.add(productImageDO);
 
         return list;
+    }
+
+
+    /**
+     * 查询是否免邮费
+     *
+     * @param page
+     * @return java.lang.String
+     * @author puffer
+     * @date 2020年05月23日 15:23:52
+     * @since 1.0.0
+     */
+
+    public static boolean queryFreeShipping(Page page) {
+        String s = page.getHtml().xpath(FREE_SHIPPING_XPAHT).toString();
+        if(StringUtils.isBlank(s)){
+            return false;
+        }
+        return s.contains(AmazonConstant.FREE_SHIPPING);
     }
 }

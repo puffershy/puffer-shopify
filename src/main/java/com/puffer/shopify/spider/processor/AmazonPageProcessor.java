@@ -1,7 +1,10 @@
 package com.puffer.shopify.spider.processor;
 
+import com.puffer.shopify.common.constants.AmazonConstant;
 import com.puffer.shopify.common.constants.PatternConstants;
 import com.puffer.shopify.common.enums.ProductFlowStateEnum;
+import com.puffer.shopify.common.enums.ProductMaterialEnum;
+import com.puffer.shopify.common.enums.ProductTypeEnum;
 import com.puffer.shopify.common.enums.YesNoEnum;
 import com.puffer.shopify.common.util.AmazonPageUtil;
 import com.puffer.shopify.common.util.PatterUtil;
@@ -28,12 +31,12 @@ import java.util.regex.Matcher;
  */
 public class AmazonPageProcessor implements PageProcessor {
 
-    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
-    private static final String LIST_URL_PATTER = ".*Best-Sellers.*";
+    private Site site = Site.me().setTimeOut(10000).setRetryTimes(3).setSleepTime(1000);
+//    private static final String LIST_URL_PATTER = "(.*Best-Sellers.* |)|(.*new-releases.*)";
 
     @Override
     public void process(Page page) {
-        if (page.getUrl().regex(LIST_URL_PATTER).match()) {
+        if (page.getUrl().regex(PatternConstants.AMAZON_BEST_SELLER_URL).match()) {
             //如果当前页面是列表页面
 
             //添加所有产品的连接
@@ -45,6 +48,12 @@ public class AmazonPageProcessor implements PageProcessor {
             page.addTargetRequests(AmazonPageUtil.queryPageUrlList(page));
             page.setSkip(true);
         } else {
+
+            boolean contains = page.getUrl().toString().contains("/dp/");
+            if (!contains) {
+                page.setSkip(true);
+                return;
+            }
 
             //构建产品信息
             buildProduct(page);
@@ -75,21 +84,33 @@ public class AmazonPageProcessor implements PageProcessor {
         BigDecimal price = AmazonPageUtil.queryPrice(page);
         String description = AmazonPageUtil.queryDescription(page);
 
-        if (StringUtils.isBlank(title)) {
+        if (StringUtils.isBlank(title) || StringUtils.isBlank(spu) || price == null) {
             page.setSkip(true);
             return null;
         }
 
+        boolean freeShipping = AmazonPageUtil.queryFreeShipping(page);
+
+
         ProductDO productDO = new ProductDO();
         productDO.setSpu(spu);
-        productDO.setType("mug");
+        productDO.setType(ProductTypeEnum.COFFEE_MUG.name());
+        productDO.setMaterial(ProductMaterialEnum.Ceramic.name());
         productDO.setTitle(title);
         productDO.setAmazonPrice(price);
         productDO.setUrl(url);
+        productDO.setFreeShipping(freeShipping ? YesNoEnum.YES.getValue() : YesNoEnum.NO.getValue());
         //        productDO.setShopifyPrice();
         //        productDO.setProductId();
         productDO.setFlowState(ProductFlowStateEnum.TO_UPLOAD.getValue());
-        productDO.setState(YesNoEnum.YES.getValue());
+
+
+        if (price.compareTo(new BigDecimal("999999")) == 0) {
+            productDO.setState(YesNoEnum.YES.getValue());
+        } else {
+            productDO.setState(9);
+        }
+
         //        productDO.setCreateTime();
         //        productDO.setUpdateTime();
         productDO.setDescription(description);
@@ -97,39 +118,8 @@ public class AmazonPageProcessor implements PageProcessor {
         return productDO;
     }
 
-    private String getRank(Page page) {
-        List<String> xpahtList = Lists.newArrayList();
-
-        //*[@id="productDetails_detailBullets_sections1"]/tbody/tr[8]/th
-        //*[@id="productDetails_detailBullets_sections1"]/tbody/tr[8]/td/span/span[1]
-        xpahtList.add("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr[7]/td/span/span[2]/text()");
-        xpahtList.add("*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr[6]/td/span/span[2]/text()");
-        xpahtList.add("//*[@id=\"productDetails_detailBullets_sections1\"]/tbody/tr[8]/td/span/span[3]/text()");
-        String rank = "";
-        for (String xpath : xpahtList) {
-            rank = page.getHtml().xpath(xpath).toString();
-            if (StringUtils.isNotBlank(rank)) {
-                Matcher matcher = PatterUtil.instance(PatternConstants.NUMBER).matcher(rank);
-                matcher.find();
-                return matcher.group();
-            }
-        }
-        return "";
-    }
-
     @Override
     public Site getSite() {
         return site;
     }
-
-    // public static void main(String[] args) {
-    //
-    //     // Spider.create(new AmazonPageProcessor())
-    //     //         .addUrl("https://www.amazon.com/gp/new-releases/home-garden/13749881/ref=zg_bs_tab_t_bsnr")
-    //     //         .addPipeline(new GitHubPipeline2())
-    //     //         //开启5个线程抓取
-    //     //         .thread(5)
-    //     //         //启动爬虫
-    //     //         .run();
-    // }
 }

@@ -1,5 +1,6 @@
 package com.puffer.shopify.service;
 
+import com.puffer.core.log.Log;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.entity.ProductVariantDO;
@@ -8,7 +9,9 @@ import com.puffer.shopify.mapper.ProductImageDao;
 import com.puffer.shopify.mapper.ProductRankDao;
 import com.puffer.shopify.mapper.ProductVariantDao;
 import com.puffer.shopify.vo.ProductVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,7 @@ import java.util.List;
  * @date 2020年05月22日 15:06:30
  * @since 1.0.0
  */
+@Slf4j
 @Service
 public class ProductService {
     @Resource
@@ -38,9 +42,13 @@ public class ProductService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveProductVO(ProductVO productVO) {
-
         //step1.保存产品信息
-        productDao.insert(productVO.getProductDO());
+        try {
+            productDao.insert(productVO.getProductDO());
+        } catch (DuplicateKeyException e) {
+            log.info(Log.newInstance("","产品已经存在").kv("spu",productVO.getProductDO().getSpu()).kv("url",productVO.getProductDO().getUrl()).toString());
+            return;
+        }
 
         //step2. 保存产品排行榜
         List<ProductRankDO> productRankDOList = productVO.getProductRankDOList();

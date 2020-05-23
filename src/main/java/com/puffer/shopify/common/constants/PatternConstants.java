@@ -29,5 +29,5 @@ public class PatternConstants {
     /**
      * 亚马逊销售排行版url正则匹配
      */
-    public static final String AMAZON_BEST_SELLER_URL = ".*Best-Sellers.*";
+    public static final String AMAZON_BEST_SELLER_URL = "(.*Best-Sellers.*)|(.*new-releases.*)";
 }
