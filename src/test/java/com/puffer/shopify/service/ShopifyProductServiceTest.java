@@ -33,7 +33,7 @@ public class ShopifyProductServiceTest extends AbstractTest {
 
     @Test
     public void testUploadProduct() {
-        String spu = "B087ZN6RTR";
+        String spu = "B08742Y2XN";
 
         ProductVO productVO = productService.query(spu);
 
