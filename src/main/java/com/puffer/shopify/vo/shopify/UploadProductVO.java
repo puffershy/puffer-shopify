@@ -2,6 +2,7 @@ package com.puffer.shopify.vo.shopify;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import lombok.Value;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -15,7 +16,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Data
-public class SaveProductVO {
+public class UploadProductVO {
     private SaveProductDetail product;
 
     @Data
@@ -71,7 +72,20 @@ public class SaveProductVO {
     public static class Variant {
         private String option1;
         private BigDecimal price;
+        @JSONField(name = "compare_at_price")
+        private BigDecimal compareAtPrice;
         private String sku;
+
+        /**
+         * 默认重量为0.4
+         */
+        private BigDecimal weight = new BigDecimal("0.4");
+        /**
+         * 默认单位为kg
+         */
+
+        @JSONField(name = "weight_unit")
+        private String weightUnit = "kg";
 
     }
 

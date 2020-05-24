@@ -5,7 +5,12 @@ public enum ProductFlowStateEnum {
     /**
      * 待上传
      */
-    TO_UPLOAD(0);
+    TO_UPLOAD(0),
+
+    /**
+     * 上传成功
+     */
+    UPLOAD_SUCCESS(1);
 
     private int value;
 

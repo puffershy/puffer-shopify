@@ -40,4 +40,9 @@ public class ProductVO {
      */
     private List<ProductImageDO> productImageDOList;
 
+
+    public String getSpu(){
+        return productDO.getSpu();
+    }
+
 }

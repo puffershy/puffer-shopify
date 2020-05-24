@@ -18,4 +18,6 @@ public interface ProductImageDao {
      * @since 9.3.4
      */
     int insertList(@Param("list") List<ProductImageDO> productImageDOList);
+
+    List<ProductImageDO> queryList(@Param("spu") String spu);
 }

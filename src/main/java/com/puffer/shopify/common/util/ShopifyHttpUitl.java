@@ -101,7 +101,7 @@ public class ShopifyHttpUitl {
     }
 
     public static OkHttpClient buildBasicAuthClient(final String name, final String password) {
-        return new OkHttpClient.Builder().readTimeout(30000,TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
+        return new OkHttpClient.Builder().readTimeout(100000,TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 String credential = Credentials.basic(name, password);

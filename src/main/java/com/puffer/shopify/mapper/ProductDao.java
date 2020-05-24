@@ -1,6 +1,9 @@
 package com.puffer.shopify.mapper;
 
 import com.puffer.shopify.entity.ProductDO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ProductDao {
     /**
@@ -13,4 +16,11 @@ public interface ProductDao {
      * @since 9.3.4
      */
     int insert(ProductDO record);
+
+    int updateProductId(@Param("spu") String spu, @Param("productId") String productId,@Param("flowState") int flowState);
+
+    List<ProductDO> queryList(@Param("flowState") int flowState, @Param("size") int size);
+
+
+    ProductDO query(@Param("spu")String spu);
 }

@@ -21,11 +21,9 @@ public class AmazonPageProcessorTest extends AbstractTest {
 
     @Test
     public void testProcess() {
-//         String url = "https://www.amazon.com/Best-Sellers-Kitchen-Dining-Novelty-Coffee-Mugs/zgbs/kitchen/9302388011/ref=zg_bs_pg_1?_encoding=UTF8&pg=1";
-//        String url = "https://www.amazon.com/Anti-Social-Quarantine-Distancing-COVID-19-2020-collecting/dp/B087QNFK9K/ref=zg_bs_9302388011_1?_encoding=UTF8&refRID=7RRWH3NSNCAEP4CVX23W&th=1";
-        // String url = "https://tech.163.com/20/0522/10/FD7P0UIE00097U7R.html";
 
         String url = "https://www.amazon.com/gp/new-releases/kitchen/9302388011/ref=zg_bsnr_pg_1?ie=UTF8&pg=1";
+//        String url = "https://www.amazon.com/MugBros-Fathers-Quarantine-Novelty-Coffee/dp/B087ZN6RTR/ref=zg_bsnr_9302388011_5/130-4131498-6092038?_encoding=UTF8&psc=1&refRID=E8MPGTFB5X7BMB7TY358";
         Spider.create(new AmazonPageProcessor())
                 .addUrl(url)
                 .addPipeline(amazonPipeline)

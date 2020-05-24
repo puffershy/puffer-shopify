@@ -2,10 +2,8 @@ package com.puffer.shopify.spider.processor;
 
 import com.puffer.shopify.common.constants.AmazonConstant;
 import com.puffer.shopify.common.constants.PatternConstants;
-import com.puffer.shopify.common.enums.ProductFlowStateEnum;
-import com.puffer.shopify.common.enums.ProductMaterialEnum;
-import com.puffer.shopify.common.enums.ProductTypeEnum;
-import com.puffer.shopify.common.enums.YesNoEnum;
+import com.puffer.shopify.common.constants.ShopifyConstant;
+import com.puffer.shopify.common.enums.*;
 import com.puffer.shopify.common.util.AmazonPageUtil;
 import com.puffer.shopify.common.util.PatterUtil;
 import com.puffer.shopify.entity.ProductDO;
@@ -98,6 +96,7 @@ public class AmazonPageProcessor implements PageProcessor {
         productDO.setMaterial(ProductMaterialEnum.Ceramic.name());
         productDO.setTitle(title);
         productDO.setAmazonPrice(price);
+        productDO.setShopifyPrice(price.add(ShopifyConstant.ADD_AMAZON_PRICE));
         productDO.setUrl(url);
         productDO.setFreeShipping(freeShipping ? YesNoEnum.YES.getValue() : YesNoEnum.NO.getValue());
         //        productDO.setShopifyPrice();
@@ -105,11 +104,8 @@ public class AmazonPageProcessor implements PageProcessor {
         productDO.setFlowState(ProductFlowStateEnum.TO_UPLOAD.getValue());
 
 
-        if (price.compareTo(new BigDecimal("999999")) == 0) {
-            productDO.setState(YesNoEnum.YES.getValue());
-        } else {
-            productDO.setState(9);
-        }
+        productDO.setState(ProductStateEnum.EFFECTIVE.getValue());
+
 
         //        productDO.setCreateTime();
         //        productDO.setUpdateTime();

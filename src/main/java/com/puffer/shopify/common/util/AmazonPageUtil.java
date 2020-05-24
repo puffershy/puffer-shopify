@@ -208,15 +208,29 @@ public class AmazonPageUtil {
 
     public static String queryDescription(Page page) {
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("<ul>");
         List<String> all = page.getHtml().xpath(DESCRIPTION_XPATH).all();
         for (int i = 0; i < all.size(); i++) {
             if (i == 0) {
                 continue;
             }
 
-            builder.append(all.get(i)).append("\n");
+            String content = all.get(i);
+
+            for (String s : AmazonConstant.DESCRIPTION_REMOVE_TEXT) {
+                if(content.contains(s)){
+                    content = null;
+                    break;
+                }
+            }
+
+            if(StringUtils.isBlank(content)){
+                continue;
+            }
+            builder.append("<li>").append(content).append("</li>");
         }
+
+        builder.append("</ul>");
 
         return builder.toString();
     }
@@ -247,7 +261,7 @@ public class AmazonPageUtil {
         if (content.startsWith("http")) {
             productImageDO.setImageUrl(content);
         } else {
-            productImageDO.setAttachment(content.trim());
+            productImageDO.setAttachment(content.trim().replace(AmazonConstant.BASE64_PRIFIX,""));
         }
 
         list.add(productImageDO);
