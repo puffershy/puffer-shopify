@@ -8,9 +8,14 @@ public enum ProductFlowStateEnum {
     TO_UPLOAD(0),
 
     /**
+     * 待更新图片
+     */
+    TO_UPDATE_IMG(1),
+
+    /**
      * 上传成功
      */
-    UPLOAD_SUCCESS(1);
+    UPLOAD_SUCCESS(10);
 
     private int value;
 

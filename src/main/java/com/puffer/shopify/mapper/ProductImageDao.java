@@ -20,4 +20,6 @@ public interface ProductImageDao {
     int insertList(@Param("list") List<ProductImageDO> productImageDOList);
 
     List<ProductImageDO> queryList(@Param("spu") String spu);
+
+    int updateUrl(@Param("spu") String spu, @Param("imageUrl") String imageUrl);
 }

@@ -7,7 +7,6 @@ import com.puffer.shopify.common.enums.ProductStateEnum;
 import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
-import com.puffer.shopify.entity.ProductVariantDO;
 import com.puffer.shopify.mapper.ProductDao;
 import com.puffer.shopify.mapper.ProductImageDao;
 import com.puffer.shopify.mapper.ProductRankDao;
@@ -15,6 +14,7 @@ import com.puffer.shopify.mapper.ProductVariantDao;
 import com.puffer.shopify.vo.ProductVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,13 +69,13 @@ public class ProductService {
             }
 
             //step4. 保存变体
-            List<ProductVariantDO> variantDOList = productVO.getVariantDOList();
-            if (CollectionUtils.isNotEmpty(variantDOList)) {
-                productVariantDao.insertList(variantDOList);
-            }
+//            List<ProductVariantDO> variantDOList = productVO.getVariantDOList();
+//            if (CollectionUtils.isNotEmpty(variantDOList)) {
+//                productVariantDao.insertList(variantDOList);
+//            }
         } catch (Exception e) {
-            log.error(Log.newInstance("","保存数据异常").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString(),e);
-            throw  e;
+            log.error(Log.newInstance("", "保存数据异常").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString(), e);
+            throw e;
         }
     }
 
@@ -114,5 +114,19 @@ public class ProductService {
     public ProductVO query(String spu) {
         ProductDO productDO = productDao.query(spu);
         return buildProductVO(productDO);
+    }
+
+    public void updateProductVO(ProductVO productVO) {
+        //更新图片url
+        List<ProductImageDO> productImageDOList = productVO.getProductImageDOList();
+        for (ProductImageDO productImageDO : productImageDOList) {
+            if (StringUtils.isNotBlank(productImageDO.getImageUrl())) {
+                int i = productImageDao.updateUrl(productImageDO.getSpu(), productImageDO.getImageUrl());
+                if (i > 0) {
+                    log.info(Log.newInstance("", "更新图片信息完成").kv("spu", productVO.getSpu()).toString());
+                }
+            }
+        }
+
     }
 }

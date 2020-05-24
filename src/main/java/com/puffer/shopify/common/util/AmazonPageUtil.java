@@ -72,6 +72,11 @@ public class AmazonPageUtil {
 //    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
     private static final String IMAGE_XPATH = "//*[@id=\"imgTagWrapperId\"]/img/@data-old-hires";
 
+
+    public static boolean isListPage(Page page) {
+        return page.getUrl().regex(PatternConstants.AMAZON_BEST_SELLER_URL).match();
+    }
+
     /**
      * 获取所有产品的连接
      *
@@ -219,13 +224,13 @@ public class AmazonPageUtil {
             String content = all.get(i);
 
             for (String s : AmazonConstant.DESCRIPTION_REMOVE_TEXT) {
-                if(content.contains(s)){
+                if (content.contains(s)) {
                     content = null;
                     break;
                 }
             }
 
-            if(StringUtils.isBlank(content)){
+            if (StringUtils.isBlank(content)) {
                 continue;
             }
             builder.append("<li>").append(content).append("</li>");
@@ -262,7 +267,7 @@ public class AmazonPageUtil {
         if (content.startsWith("http")) {
             productImageDO.setImageUrl(content);
         } else {
-            productImageDO.setAttachment(content.trim().replace(AmazonConstant.BASE64_PRIFIX,""));
+            productImageDO.setAttachment(content.trim().replace(AmazonConstant.BASE64_PRIFIX, ""));
         }
 
         list.add(productImageDO);
@@ -283,7 +288,7 @@ public class AmazonPageUtil {
 
     public static boolean queryFreeShipping(Page page) {
         String s = page.getHtml().xpath(FREE_SHIPPING_XPAHT).toString();
-        if(StringUtils.isBlank(s)){
+        if (StringUtils.isBlank(s)) {
             return false;
         }
         return s.contains(AmazonConstant.FREE_SHIPPING);

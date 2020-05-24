@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @since 1.0.0
  */
 @Component
-public class AmazonPipeline implements Pipeline {
+public class AmazonUpdatePipeline implements Pipeline {
 
     @Resource
     private ProductService productService;
@@ -25,7 +25,7 @@ public class AmazonPipeline implements Pipeline {
     @Override
     public void process(ResultItems resultItems, Task task) {
         ProductVO productVO = resultItems.get("productVO");
-        productService.saveProductVO(productVO);
+        productService.updateProductVO(productVO);
     }
 
 }

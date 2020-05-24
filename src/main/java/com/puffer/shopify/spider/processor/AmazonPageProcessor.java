@@ -30,7 +30,7 @@ public class AmazonPageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        if (page.getUrl().regex(PatternConstants.AMAZON_BEST_SELLER_URL).match()) {
+        if (AmazonPageUtil.isListPage(page)) {
             //如果当前页面是列表页面
 
             //添加所有产品的连接

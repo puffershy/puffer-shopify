@@ -22,6 +22,8 @@ public class AmazonConstant {
      */
     public static final String BASE64_PRIFIX = "data:image/jpeg;base64,";
 
+    public static final int SPIDER_THREAD_NUM = 5;
+
     /**
      * 内容关键字需要剔除的
      */
@@ -31,4 +33,5 @@ public class AmazonConstant {
         DESCRIPTION_REMOVE_TEXT.add("Money Back");
         DESCRIPTION_REMOVE_TEXT.add("in the USA");
     }
+
 }

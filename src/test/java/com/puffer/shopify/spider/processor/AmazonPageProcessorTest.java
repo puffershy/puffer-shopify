@@ -1,7 +1,12 @@
 package com.puffer.shopify.spider.processor;
 
 import com.puffer.shopify.AbstractTest;
+import com.puffer.shopify.common.enums.ProductFlowStateEnum;
+import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.service.AmazonService;
+import com.puffer.shopify.service.ProductService;
 import com.puffer.shopify.spider.pipeline.AmazonPipeline;
+import com.puffer.shopify.vo.ProductVO;
 import org.assertj.core.util.Lists;
 import org.testng.annotations.Test;
 import us.codecraft.webmagic.Spider;
@@ -10,6 +15,7 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.puffer.shopify.common.constants.PatternConstants.AMAZON_BEST_SELLER_URL;
 
@@ -18,6 +24,12 @@ public class AmazonPageProcessorTest extends AbstractTest {
 
     @Resource
     private AmazonPipeline amazonPipeline;
+
+    @Resource
+    private ProductService productService;
+
+    @Resource
+    private AmazonService amazonService;
 
     @Test
     public void testProcess() {
@@ -35,7 +47,19 @@ public class AmazonPageProcessorTest extends AbstractTest {
 
 
     @Test
-    public void testUrl(){
+    public void updateImage() {
+
+        List<ProductVO> productVOS = productService.queryList(ProductFlowStateEnum.TO_UPLOAD, 150);
+
+        List<String> urlList = productVOS.stream().map(ProductVO::getProductDO).map(ProductDO::getUrl).collect(Collectors.toList());
+
+        amazonService.updateImage(urlList);
+
+    }
+
+
+    @Test
+    public void testUrl() {
         PlainText plainText = PlainText.create("https://www.amazon.com/gp/new-releases/kitchen/9302388011/ref=zg_bsnr_pg_2?ie=UTF8&pg=2");
 
         Selectable regex = plainText.regex(".*Best-Sellers.* | .*new-releases.*");
@@ -55,8 +79,8 @@ public class AmazonPageProcessorTest extends AbstractTest {
             PlainText plainText = PlainText.create(s);
             System.out.println();
 
-        Selectable regex = plainText.regex(AMAZON_BEST_SELLER_URL);
-        System.out.println(regex.match());
+            Selectable regex = plainText.regex(AMAZON_BEST_SELLER_URL);
+            System.out.println(regex.match());
         }
 
     }

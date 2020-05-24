@@ -17,8 +17,12 @@
             (#{po.spu,jdbcType=VARCHAR}, #{po.imageUrl,jdbcType=VARCHAR}, #{po.attachment})
         </foreach>
     </insert>
+    <update id="updateUrl">
+        update tb_product_image set image_url = #{imageUrl} where spu = #{spu}
+    </update>
     <select id="queryList" resultType="com.puffer.shopify.entity.ProductImageDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from tb_product_image where spu = #{spu}
     </select>
 </mapper>
