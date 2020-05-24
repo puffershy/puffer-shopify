@@ -12,15 +12,22 @@ public enum ProductMaterialEnum {
     /**
      * 咖啡杯
      */
-    Ceramic("陶瓷");
+    CERAMIC("Ceramic","陶瓷");
 
-    private String chinese;
+    private String value;
 
-    ProductMaterialEnum(String chinese) {
-        this.chinese = chinese;
+    private String decrition;
+
+    ProductMaterialEnum(String value, String decrition) {
+        this.value = value;
+        this.decrition = decrition;
     }
 
-    public String getChinese() {
-        return chinese;
+    public String getValue() {
+        return value;
+    }
+
+    public String getDecrition() {
+        return decrition;
     }
 }

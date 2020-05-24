@@ -16,7 +16,7 @@ public class ShopifyConstant {
 
     // public static final String
 
-    public static final String VENDOR  = "doswarm";
+    public static final String VENDOR  = "DoSwarm";
 
     /**
      * 亚马逊价格增加价格

@@ -67,9 +67,10 @@ public class AmazonPageUtil {
 
 
     /**
-     * 图片
+     * 图片 //*[@id="ivLargeImage"]/img
      */
-    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
+//    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
+    private static final String IMAGE_XPATH = "//*[@id=\"ivLargeImage\"]/img/@src";
 
     /**
      * 获取所有产品的连接

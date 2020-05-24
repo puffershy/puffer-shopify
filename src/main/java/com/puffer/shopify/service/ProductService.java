@@ -3,6 +3,7 @@ package com.puffer.shopify.service;
 import com.google.common.collect.Lists;
 import com.puffer.core.log.Log;
 import com.puffer.shopify.common.enums.ProductFlowStateEnum;
+import com.puffer.shopify.common.enums.ProductStateEnum;
 import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
@@ -82,7 +83,7 @@ public class ProductService {
 
         List<ProductVO> list = Lists.newArrayListWithCapacity(size);
 
-        List<ProductDO> productDOS = productDao.queryList(flowStateEnum.getValue(), size);
+        List<ProductDO> productDOS = productDao.queryList(flowStateEnum.getValue(), size, ProductStateEnum.EFFECTIVE.getValue());
 
         for (ProductDO productDO : productDOS) {
 

@@ -19,7 +19,7 @@ public interface ProductDao {
 
     int updateProductId(@Param("spu") String spu, @Param("productId") String productId,@Param("flowState") int flowState);
 
-    List<ProductDO> queryList(@Param("flowState") int flowState, @Param("size") int size);
+    List<ProductDO> queryList(@Param("flowState") int flowState, @Param("size") int size, @Param("state") int state);
 
 
     ProductDO query(@Param("spu")String spu);

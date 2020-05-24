@@ -12,7 +12,7 @@ package com.puffer.shopify.common.enums;
 public enum ProductStateEnum {
 
     /**
-     * 删除
+     * 无效
      */
     DELETE(0),
 

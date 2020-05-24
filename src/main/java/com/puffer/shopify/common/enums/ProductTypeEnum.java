@@ -12,6 +12,15 @@ public enum ProductTypeEnum {
     /**
      * 咖啡杯
      */
-    COFFEE_MUG;
+    COFFEE_MUG("Coffee Mug");
 
+    private String value;
+
+    ProductTypeEnum(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
