@@ -64,6 +64,13 @@
         </dependency>
 
         <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-selenium</artifactId>
+            <version>0.7.3</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.github.romewing</groupId>
             <artifactId>webmagic-spring-boot-starter</artifactId>
             <version>1.0</version>
