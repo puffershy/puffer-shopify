@@ -11,7 +11,7 @@ public interface ProductDao {
      *
      * @param record
      * @return int
-     * @author buyi
+     * @author puffer
      * @date 2020年05月22日 14:41:45
      * @since 9.3.4
      */
@@ -23,4 +23,6 @@ public interface ProductDao {
 
 
     ProductDO query(@Param("spu")String spu);
+
+    List<ProductDO> queryAll();
 }

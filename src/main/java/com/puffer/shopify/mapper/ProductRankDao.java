@@ -12,7 +12,7 @@ public interface ProductRankDao {
     /**
      * 批量保存
      *
-     * @author buyi
+     * @author puffer
      * @date 2020年05月22日 14:46:30
      * @since 9.3.4
      * @param productRankDOList

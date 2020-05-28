@@ -13,7 +13,7 @@ public interface ProductImageDao {
      *
      * @param productImageDOList
      * @return int
-     * @author buyi
+     * @author puffer
      * @date 2020年05月22日 14:47:55
      * @since 9.3.4
      */

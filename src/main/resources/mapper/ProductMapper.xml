@@ -31,4 +31,7 @@
         select <include refid="Base_Column_List"/>
         from tb_product where spu = #{spu}
     </select>
+    <select id="queryAll" resultType="com.puffer.shopify.entity.ProductDO">
+        select  <include refid="Base_Column_List"/> from tb_product
+    </select>
 </mapper>

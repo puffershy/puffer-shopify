@@ -25,6 +25,9 @@ public class AmazonPageProcessorTest extends AbstractTest {
 
 
     @Resource
+    private AmazonPageProcessor amazonPageProcessor;
+
+    @Resource
     private AmazonPipeline amazonPipeline;
 
     @Resource
@@ -36,9 +39,9 @@ public class AmazonPageProcessorTest extends AbstractTest {
     @Test
     public void testProcess() {
 
-       // String url = "https://www.amazon.com/gp/new-releases/kitchen/9302388011/ref=zg_bsnr_pg_1?ie=UTF8&pg=1";
-        String url = "https://www.amazon.com/Coffee-Remember-Graduation-Quarantine-Ceramic/dp/B08742Y2XN/ref=nav_signin?_encoding=UTF8&psc=1&refRID=6WT78YTWCGCQSHWMF94E&";
-        Spider.create(new AmazonPageProcessor())
+       String url = "https://www.amazon.com/gp/new-releases/kitchen/9302388011/ref=zg_bsnr_pg_1?ie=UTF8&pg=1";
+       //  String url = "https://www.amazon.com/Coffee-Remember-Graduation-Quarantine-Ceramic/dp/B08742Y2XN/ref=nav_signin?_encoding=UTF8&psc=1&refRID=6WT78YTWCGCQSHWMF94E&";
+        Spider.create(amazonPageProcessor)
                 .addUrl(url)
                 .addPipeline(amazonPipeline)
                 //开启5个线程抓取

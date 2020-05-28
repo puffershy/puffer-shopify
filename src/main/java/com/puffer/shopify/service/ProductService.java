@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * 产品服务
  *
- * @author buyi
+ * @author puffer
  * @date 2020年05月22日 15:06:30
  * @since 1.0.0
  */
@@ -46,15 +46,14 @@ public class ProductService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveProductVO(ProductVO productVO) {
-        //step1.保存产品信息
         try {
-            productDao.insert(productVO.getProductDO());
-        } catch (DuplicateKeyException e) {
-            log.info(Log.newInstance("", "产品已经存在").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString());
-            return;
-        }
-
-        try {
+            //step1.保存产品信息
+            try {
+                productDao.insert(productVO.getProductDO());
+            } catch (DuplicateKeyException e) {
+                log.info(Log.newInstance("", "产品已经存在").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString());
+                return;
+            }
 
             //step2. 保存产品排行榜
             List<ProductRankDO> productRankDOList = productVO.getProductRankDOList();
@@ -69,10 +68,10 @@ public class ProductService {
             }
 
             //step4. 保存变体
-//            List<ProductVariantDO> variantDOList = productVO.getVariantDOList();
-//            if (CollectionUtils.isNotEmpty(variantDOList)) {
-//                productVariantDao.insertList(variantDOList);
-//            }
+            //            List<ProductVariantDO> variantDOList = productVO.getVariantDOList();
+            //            if (CollectionUtils.isNotEmpty(variantDOList)) {
+            //                productVariantDao.insertList(variantDOList);
+            //            }
         } catch (Exception e) {
             log.error(Log.newInstance("", "保存数据异常").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString(), e);
             throw e;
@@ -92,7 +91,6 @@ public class ProductService {
                 continue;
             }
 
-
             list.add(productVO);
 
         }
@@ -106,7 +104,6 @@ public class ProductService {
         if (CollectionUtils.isEmpty(productImageDOS)) {
             return null;
         }
-
 
         return ProductVO.builder().productDO(productDO).productImageDOList(productImageDOS).build();
     }

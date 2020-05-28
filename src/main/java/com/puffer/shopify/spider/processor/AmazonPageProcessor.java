@@ -12,6 +12,7 @@ import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.vo.ProductVO;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -32,6 +33,12 @@ public class AmazonPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setTimeOut(10000).setRetryTimes(3).setSleepTime(1000);
     //    private static final String LIST_URL_PATTER = "(.*Best-Sellers.* |)|(.*new-releases.*)";
+
+    private List<String> spuList = Lists.newArrayList();
+
+    public void setSpuList(List<String> spuList) {
+        this.spuList.addAll(spuList);
+    }
 
     @Override
     public void process(Page page) {
@@ -62,7 +69,8 @@ public class AmazonPageProcessor implements PageProcessor {
     private void buildProduct(Page page) {
         //step1. 构建产品信息
         ProductDO productDO = buildProductDO(page);
-        if (productDO == null) {
+        if (productDO == null || spuList.contains(productDO.getSpu())) {
+            page.setSkip(true);
             return;
         }
 

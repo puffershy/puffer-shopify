@@ -13,7 +13,7 @@ public interface ProductVariantDao {
      *
      * @param variantDOList
      * @return int
-     * @author buyi
+     * @author puffer
      * @date 2020年05月22日 14:50:14
      * @since 9.3.4
      */
