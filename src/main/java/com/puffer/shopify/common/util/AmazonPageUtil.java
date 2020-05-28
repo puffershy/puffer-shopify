@@ -41,9 +41,8 @@ public class AmazonPageUtil {
     /**
      * 产品价格
      */
-//    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
+    //    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
     private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"price_inside_buybox\"]/text()");
-
 
     /**
      * 是否包邮
@@ -65,13 +64,11 @@ public class AmazonPageUtil {
      */
     private static final String DESCRIPTION_XPATH = "//*[@id=\"feature-bullets\"]/ul/li/allText()";
 
-
     /**
      * 图片 //*[@id="ivLargeImage"]/img
      */
-//    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
+    //    private static final String IMAGE_XPATH = "//*[@id=\"landingImage\"]/@src";
     private static final String IMAGE_XPATH = "//*[@id=\"imgTagWrapperId\"]/img/@data-old-hires";
-
 
     public static boolean isListPage(Page page) {
         return page.getUrl().regex(PatternConstants.AMAZON_BEST_SELLER_URL).match();
@@ -140,7 +137,6 @@ public class AmazonPageUtil {
             log.info(Log.newInstance("", "价格为空，跳过").kv("url", page.getUrl().toString()).toString());
             return null;
         }
-
 
         price = price.replace("$", "").trim();
         return new BigDecimal(price);
@@ -245,7 +241,6 @@ public class AmazonPageUtil {
 
     }
 
-
     /**
      * 图片信息
      *
@@ -261,6 +256,11 @@ public class AmazonPageUtil {
         List<ProductImageDO> list = Lists.newArrayList();
 
         String content = page.getHtml().xpath(IMAGE_XPATH).toString();
+
+        if (StringUtils.isBlank(content)) {
+            content = page.getHtml().xpath("//*[@id=\"imgTagWrapperId\"]/img/@src").toString();
+        }
+
         ProductImageDO productImageDO = new ProductImageDO();
         productImageDO.setSpu(spu);
 
@@ -274,7 +274,6 @@ public class AmazonPageUtil {
 
         return list;
     }
-
 
     /**
      * 查询是否免邮费

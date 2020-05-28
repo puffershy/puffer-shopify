@@ -24,6 +24,18 @@ public class AmazonService {
     @Resource
     private ProductService productService;
 
+    @Resource
+    private AmazonPageProcessor amazonPageProcessor;
+
+    public void process(String url) {
+        Spider.create(amazonPageProcessor)
+                .addUrl(url)
+                .addPipeline(amazonPipeline)
+                //开启5个线程抓取
+                .thread(AmazonConstant.SPIDER_THREAD_NUM)
+                //启动爬虫
+                .run();
+    }
 
     public void updateImageList(List<ProductDO> productDOList) {
         List<String> urlList = productDOList.stream().map(ProductDO::getUrl).collect(Collectors.toList());
@@ -31,9 +43,8 @@ public class AmazonService {
         updateImage(urlList);
     }
 
-
     public void updateImage(List<String> urlList) {
-        Spider.create(new AmazonPageProcessor())
+        Spider.create(amazonPageProcessor)
                 .addUrl(urlList.toArray(new String[urlList.size()]))
                 .addPipeline(amazonUpdatePipeline)
                 //开启5个线程抓取
@@ -41,6 +52,5 @@ public class AmazonService {
                 //启动爬虫
                 .run();
     }
-
 
 }

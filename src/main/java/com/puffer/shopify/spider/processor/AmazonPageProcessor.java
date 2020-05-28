@@ -1,14 +1,18 @@
 package com.puffer.shopify.spider.processor;
 
-import com.puffer.shopify.common.constants.PatternConstants;
 import com.puffer.shopify.common.constants.ShopifyConstant;
-import com.puffer.shopify.common.enums.*;
+import com.puffer.shopify.common.enums.ProductFlowStateEnum;
+import com.puffer.shopify.common.enums.ProductMaterialEnum;
+import com.puffer.shopify.common.enums.ProductStateEnum;
+import com.puffer.shopify.common.enums.ProductTypeEnum;
+import com.puffer.shopify.common.enums.YesNoEnum;
 import com.puffer.shopify.common.util.AmazonPageUtil;
 import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.vo.ProductVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -23,10 +27,11 @@ import java.util.List;
  * @date 2019年10月13日 19:32:56
  * @since 1.0.0
  */
+@Service
 public class AmazonPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setTimeOut(10000).setRetryTimes(3).setSleepTime(1000);
-//    private static final String LIST_URL_PATTER = "(.*Best-Sellers.* |)|(.*new-releases.*)";
+    //    private static final String LIST_URL_PATTER = "(.*Best-Sellers.* |)|(.*new-releases.*)";
 
     @Override
     public void process(Page page) {
@@ -85,7 +90,6 @@ public class AmazonPageProcessor implements PageProcessor {
 
         boolean freeShipping = AmazonPageUtil.queryFreeShipping(page);
 
-
         ProductDO productDO = new ProductDO();
         productDO.setSpu(spu);
         productDO.setType(ProductTypeEnum.COFFEE_MUG.getValue());
@@ -99,9 +103,7 @@ public class AmazonPageProcessor implements PageProcessor {
         //        productDO.setProductId();
         productDO.setFlowState(ProductFlowStateEnum.TO_UPLOAD.getValue());
 
-
         productDO.setState(ProductStateEnum.EFFECTIVE.getValue());
-
 
         //        productDO.setCreateTime();
         //        productDO.setUpdateTime();
