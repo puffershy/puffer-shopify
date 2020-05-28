@@ -74,7 +74,7 @@ public class ProductService {
             //            }
         } catch (Exception e) {
             log.error(Log.newInstance("", "保存数据异常").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString(), e);
-            throw e;
+            // throw e;
         }
     }
 
