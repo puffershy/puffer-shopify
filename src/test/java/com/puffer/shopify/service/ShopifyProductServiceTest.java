@@ -25,7 +25,7 @@ public class ShopifyProductServiceTest extends AbstractTest {
     @Test
     public void testUploadProductList() {
 
-        int size = 150;
+        int size = 200;
         List<ProductVO> productVOList = productService.queryList(ProductFlowStateEnum.TO_UPLOAD,size);
 
         shopifyProductService.uploadProductList(productVOList);

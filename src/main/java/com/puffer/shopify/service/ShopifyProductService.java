@@ -91,15 +91,11 @@ public class ShopifyProductService {
 //        saveProductDetail.setMetafields();
 
 
-        ProductImageDO productImageDO = productImageDOList.get(0);
-        UploadProductVO.Image image = new UploadProductVO.Image();
-        if (StringUtils.isNotBlank(productImageDO.getImageUrl())) {
-            image.setSrc(productImageDO.getImageUrl());
-        } else {
-            image.setAttachment(productImageDO.getAttachment());
-        }
 
-        uploadProductDetail.setImages(Lists.newArrayList(image));
+
+        List<UploadProductVO.Image> images  = buildImages(productImageDOList);
+
+        uploadProductDetail.setImages(images);
 
 
         UploadProductVO.Variant variant = new UploadProductVO.Variant();
@@ -115,6 +111,25 @@ public class ShopifyProductService {
         UploadProductVO uploadProductVO = new UploadProductVO();
         uploadProductVO.setProduct(uploadProductDetail);
         return uploadProductVO;
+    }
+
+    private List<UploadProductVO.Image> buildImages(List<ProductImageDO> productImageDOList) {
+        List<UploadProductVO.Image> list = Lists.newArrayList();
+
+        for (ProductImageDO productImageDO : productImageDOList) {
+            UploadProductVO.Image image = new UploadProductVO.Image();
+            if (StringUtils.isNotBlank(productImageDO.getImageUrl())) {
+                image.setSrc(productImageDO.getImageUrl());
+            } else {
+                image.setAttachment(productImageDO.getAttachment());
+            }
+
+            list.add(image);
+        }
+
+        return list;
+
+
     }
 
 

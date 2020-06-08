@@ -12,6 +12,8 @@ import us.codecraft.webmagic.Page;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 亚马逊页面工具
@@ -42,7 +44,7 @@ public class AmazonPageUtil {
      * 产品价格
      */
     //    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"priceblock_ourprice\"]/text()", "//*[@id=\"priceblock_saleprice\"]/text()");
-    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"price_inside_buybox\"]/text()");
+    private static final List<String> PRICE_XPAHT = Lists.newArrayList("//*[@id=\"price_inside_buybox\"]/text()","//*[@id=\"priceblock_ourprice\"]/text()");
 
     /**
      * 是否包邮
@@ -210,6 +212,7 @@ public class AmazonPageUtil {
 
     public static String queryDescription(Page page) {
 
+        Pattern emoji = PatterUtil.instance(PatternConstants.EMOJI);
         StringBuilder builder = new StringBuilder("<ul>");
         List<String> all = page.getHtml().xpath(DESCRIPTION_XPATH).all();
         for (int i = 0; i < all.size(); i++) {
@@ -218,6 +221,13 @@ public class AmazonPageUtil {
             }
 
             String content = all.get(i);
+
+            Matcher emojiMatcher = emoji.matcher(content);
+
+            if (emojiMatcher.find()) {
+                content = emojiMatcher.replaceAll("");
+            }
+
 
             for (String s : AmazonConstant.DESCRIPTION_REMOVE_TEXT) {
                 if (content.contains(s)) {
