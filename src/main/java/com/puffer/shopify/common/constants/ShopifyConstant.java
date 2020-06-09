@@ -21,7 +21,7 @@ public class ShopifyConstant {
     /**
      * 亚马逊价格增加价格
      */
-    public static final BigDecimal ADD_AMAZON_PRICE = new BigDecimal(5);
+    public static final BigDecimal ADD_AMAZON_PRICE = new BigDecimal(2);
 
     /**
      * 比较价格增加值

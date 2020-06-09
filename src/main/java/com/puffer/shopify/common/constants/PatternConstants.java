@@ -30,4 +30,6 @@ public class PatternConstants {
      * 亚马逊销售排行版url正则匹配
      */
     public static final String AMAZON_BEST_SELLER_URL = "(.*Best-Sellers.*)|(.*new-releases.*)";
+
+    public static final String EMOJI = "[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]";
 }
