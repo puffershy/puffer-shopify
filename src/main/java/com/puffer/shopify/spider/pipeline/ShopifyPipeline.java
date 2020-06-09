@@ -9,6 +9,8 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,8 @@ public class ShopifyPipeline implements Pipeline {
     Map<String, String> urlsMap = Maps.newConcurrentMap();
     private Map<String, GoogleItem> urlItemMap = Maps.newConcurrentMap();
 
-    private List<GoogleItem> items = Lists.newArrayList();
+//    private List<GoogleItem> items = Lists.newArrayList();
+    private List<GoogleItem> items = Collections.synchronizedList(new ArrayList<>());;
 
     public Map<String, String> getUrlsMap() {
         return urlsMap;

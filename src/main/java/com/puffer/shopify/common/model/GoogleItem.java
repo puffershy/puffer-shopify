@@ -60,6 +60,6 @@ public class GoogleItem {
     private String shippingWeight;
     @XStreamAlias("g:pattern")
     private String pattern;
-    @XStreamAlias("g: color")
+    @XStreamAlias("g:color")
     private String color;
 }

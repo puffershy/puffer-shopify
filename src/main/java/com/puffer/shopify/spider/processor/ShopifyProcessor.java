@@ -12,16 +12,17 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 @Service
 public class ShopifyProcessor implements PageProcessor {
-    private Site site = Site.me().setTimeOut(10000).setRetryTimes(3).setSleepTime(1000);
+    private Site site = Site.me().setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36")
+            .setTimeOut(60000).setRetryTimes(3).setSleepTime(1000);
 
     @Override
     public void process(Page page) {
         String title = page.getHtml().xpath("//*[@id=\"shopify-section-product-template\"]/div[1]/div[2]/div[1]/div[2]/h1").toString();
-        String description = page.getHtml().xpath("//*[@id=\"description\"]").toString();
+        String description = page.getHtml().xpath("//*[@id=\"description\"]/allText()").toString();
 
         page.putField("title", title);
         page.putField("description", description);
-        page.putField("url", page.getUrl());
+        page.putField("url", page.getUrl().toString());
     }
 
     @Override

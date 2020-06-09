@@ -33,7 +33,7 @@ public class ShopifyProcessorTest {
 
     @Test
     public void test1() throws IOException {
-        String url = "http://gojeek.com/ar/products/unique-just-do-it-painting-nike-shower-curtain?variant=29458073911338";
+        String url = "https://gojeek.com/ar/products/unique-just-do-it-painting-nike-shower-curtain?variant=29458073911338";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

@@ -93,10 +93,10 @@ public class ShopifyLanguageService {
         shopifyPipeline.setUrlsMap(urlsMap);
 
         Spider.create(new ShopifyProcessor())
-                .addUrl()
+                .addUrl(urlList.toArray(new String[urlList.size()]))
                 .addPipeline(shopifyPipeline)
                 //开启5个线程抓取
-                .thread(5)
+                .thread(10)
                 //启动爬虫
                 .run();
 

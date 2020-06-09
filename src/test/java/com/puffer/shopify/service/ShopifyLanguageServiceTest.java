@@ -13,6 +13,8 @@ public class ShopifyLanguageServiceTest extends AbstractTest {
 
     @Test
     public void testHandle() throws IOException {
-        shopifyLanguageService.handle("E:\\puffer\\gojeek\\GOJEEK - 英文xml文件模板.xlsx", "E:\\puffer\\gojeek\\gojeek.xml");
+        String filePath = "/Users/yuchanghui/Documents/gojeek/GOJEEK - 英文xml文件模板.xlsx";
+        String toFilePath = "/Users/yuchanghui/Documents/gojeek/gojeek.xml";
+        shopifyLanguageService.handle(filePath, toFilePath);
     }
 }
