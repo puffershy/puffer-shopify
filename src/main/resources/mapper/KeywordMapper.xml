@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puffer.shopify.mapper.KeywordDao">
+    <sql id="Base_Column_List">
+    id AS id, keyword AS keyword, searches AS searches
+  </sql>
+
+    <insert id="saveList" parameterType="com.puffer.shopify.entity.KeywordDO">
+    insert into tb_keyword (keyword, searches)
+    values
+    <foreach collection="list" item="po" separator=",">
+        (#{po.keyword},#{po.searches})
+    </foreach>
+  </insert>
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*) from tb_keyword
+    </select>
+    <select id="queryList" resultType="com.puffer.shopify.entity.KeywordDO">
+        select <include refid="Base_Column_List"/>
+        from tb_keyword limit #{index},#{size}
+    </select>
+
+</mapper>

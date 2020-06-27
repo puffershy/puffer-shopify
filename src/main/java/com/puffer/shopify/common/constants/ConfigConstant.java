@@ -8,4 +8,6 @@ package com.puffer.shopify.common.constants;
  * @since 1.0.0
  */
 public class ConfigConstant {
+
+    public static int QUERY_SIZE = 2000;
 }
