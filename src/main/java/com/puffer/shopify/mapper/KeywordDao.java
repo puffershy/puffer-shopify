@@ -31,4 +31,6 @@ public interface KeywordDao {
     int queryCount();
 
     List<KeywordDO> queryList(@Param("index") int index, @Param("size") int size);
+
+    int updateList(@Param("list") List<KeywordDO> updateKeywordList);
 }

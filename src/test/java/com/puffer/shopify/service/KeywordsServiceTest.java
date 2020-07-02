@@ -17,9 +17,9 @@ public class KeywordsServiceTest extends AbstractTest {
 
     @Test
     public void testSaveCompite() throws IOException {
-        String dir = "/Users/yuchanghui/doswarm/keywords/";
+        String dir = "E:\\buyi\\doswarm\\keyword\\";
 
-        List<String> fileList = Lists.newArrayList(dir.concat("keyword.xlsx"));
+        List<String> fileList = Lists.newArrayList(dir.concat("1.xlsx"));
 
         keywordsService.saveCompite(fileList);
 

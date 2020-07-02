@@ -6,17 +6,23 @@
   </sql>
 
     <insert id="saveList" parameterType="com.puffer.shopify.entity.KeywordDO">
-    insert into tb_keyword (keyword, searches)
-    values
-    <foreach collection="list" item="po" separator=",">
-        (#{po.keyword},#{po.searches})
-    </foreach>
-  </insert>
+        insert into tb_keyword (keyword, searches)
+        values
+        <foreach collection="list" item="po" separator=",">
+            (#{po.keyword},#{po.searches})
+        </foreach>
+    </insert>
+    <update id="updateList">
+        <foreach collection="list" item="po" separator=";">
+            update tb_keyword set searches = #{po.searches} where keyword = #{po.keyword}
+        </foreach>
+    </update>
     <select id="queryCount" resultType="java.lang.Integer">
         select count(*) from tb_keyword
     </select>
     <select id="queryList" resultType="com.puffer.shopify.entity.KeywordDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from tb_keyword limit #{index},#{size}
     </select>
 

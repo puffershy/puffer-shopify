@@ -1,6 +1,5 @@
 package com.puffer.shopify.service;
 
-
 import com.puffer.shopify.common.constants.ConfigConstant;
 import com.puffer.shopify.entity.KeywordDO;
 import com.puffer.shopify.mapper.KeywordDao;
@@ -25,7 +24,6 @@ public class KeywordsService {
     @Resource
     private KeywordDao keywordDao;
 
-
     public void saveCompite(List<String> fileList) throws IOException {
         initKeywords();
 
@@ -44,36 +42,36 @@ public class KeywordsService {
      */
     public void saveKeywords(String filePath) throws IOException {
         List<KeywordDO> keywordDOS = Lists.newArrayList();
+
+        List<KeywordDO> updateKeywordList = Lists.newArrayList();
         int j = 0;
 
         List<Object[]> objects = ExcelUtil.readFile(filePath, 3);
         for (Object[] object : objects) {
 
-            System.out.println(j++);
-            String keyword = String.valueOf(object[0]);
+            // System.out.println(j++);
+            String keyword = String.valueOf(object[0]).trim();
 
             int i = 0;
-            try {
-                if (object.length >= 3 && object[2] != null && StringUtils.isNotBlank(object[2].toString())) {
-                    i = new Double(object[2].toString()).intValue();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
+            if (object.length >= 3 && object[2] != null && StringUtils.isNotBlank(object[2].toString())) {
+                i = new Double(object[2].toString()).intValue();
             }
 
-
-
             if (keySet.contains(keyword)) {
+                //如果已经存在，则更新
+
+                KeywordDO keywordDO = new KeywordDO();
+                keywordDO.setKeyword(keyword);
+                keywordDO.setSearches(i);
+                updateKeywordList.add(keywordDO);
                 continue;
             } else {
                 keySet.add(keyword);
             }
 
-
             KeywordDO keywordDO = new KeywordDO();
             keywordDO.setKeyword(keyword);
             keywordDO.setSearches(i);
-
             keywordDOS.add(keywordDO);
 
             if (keywordDOS.size() == ConfigConstant.QUERY_SIZE) {
@@ -87,8 +85,12 @@ public class KeywordsService {
             keywordDao.saveList(keywordDOS);
             log.info("保存关键词" + keywordDOS.size());
         }
-    }
 
+        if (!updateKeywordList.isEmpty()) {
+            keywordDao.updateList(updateKeywordList);
+            log.info("更新关键字查询量" + updateKeywordList.size());
+        }
+    }
 
     /**
      * 初始化关键词到内存
