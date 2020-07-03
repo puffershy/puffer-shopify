@@ -1,7 +1,8 @@
-package com.puffer.shopify.service;
+package com.puffer.shopify.service.amazon;
 
 import com.puffer.shopify.common.constants.AmazonConstant;
 import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.service.ProductService;
 import com.puffer.shopify.spider.pipeline.AmazonPipeline;
 import com.puffer.shopify.spider.pipeline.AmazonUpdatePipeline;
 import com.puffer.shopify.spider.processor.AmazonPageProcessor;

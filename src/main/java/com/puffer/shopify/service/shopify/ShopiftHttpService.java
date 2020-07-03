@@ -1,7 +1,8 @@
-package com.puffer.shopify.service;
+package com.puffer.shopify.service.shopify;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.puffer.core.exception.CommonExceptionCode;
 import com.puffer.core.log.Log;
 import com.puffer.shopify.common.constants.ShopifyConstant;
 import com.puffer.shopify.common.enums.ShopifyRelEnum;
@@ -37,14 +38,14 @@ public class ShopiftHttpService {
     private static Pattern pattern = Pattern.compile("<(.*?)>");
     private static Pattern relPattern = Pattern.compile("\\\"([^\\\"]*)\\\"");
 
-//     @Resource
-    //     private RestTemplate restTemplate;
-    //
-    // //    @Resource
-    // //    private ProductMapper productMapper;
-
     @Resource
     private ShopifyProperties shopifyProperties;
+
+    private OkHttpClient instanceClient() {
+        ShopifyProperties.PrivateAuth privateAuth = shopifyProperties.getPrivateAuth();
+        return ShopifyHttpUitl.buildBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
+        // return ShopifyHttpUitl.instanceBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
+    }
 
     /**
      * post请求
@@ -60,8 +61,8 @@ public class ShopiftHttpService {
     public <T> T post(String path, Object params, Class<T> clazz) {
         ShopifyProperties.PrivateAuth privateAuth = shopifyProperties.getPrivateAuth();
 
-//        OkHttpClient client = ShopifyHttpUitl.instanceBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
-        OkHttpClient client = ShopifyHttpUitl.buildBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
+        OkHttpClient client = ShopifyHttpUitl.instanceBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
+        // OkHttpClient client = ShopifyHttpUitl.buildBasicAuthClient(privateAuth.getUserName(), privateAuth.getPassword());
 
         String url = shopifyProperties.getAdminApi().concat(path);
         RequestBody requestBody = RequestBody.create(ShopifyHttpUitl.TYPE_JSON, JSON.toJSONString(params));
@@ -75,11 +76,32 @@ public class ShopiftHttpService {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            log.info("http请求响应参数："+string);
+            log.info("http请求响应参数：" + string);
             return JSONObject.parseObject(string, clazz);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("请求shopify异常");
+        }
+    }
+
+    public <T> T get(String path, Class<T> clazz) {
+        final String op = "ShopiftHttpService.get";
+        OkHttpClient client = instanceClient();
+        String url = shopifyProperties.getDomainUrl().concat(path);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            log.info("http请求响应参数：" + string);
+            return JSONObject.parseObject(string, clazz);
+        } catch (Exception e) {
+            log.error(Log.newInstance(op, "shopify http exception").toString(), e);
+            throw CommonExceptionCode.SYS_ERROR.exception();
         }
     }
 
@@ -89,12 +111,11 @@ public class ShopiftHttpService {
         ShopifyProperties.PrivateAuth privateAuth = shopifyProperties.getPrivateAuth();
         Response response = ShopifyHttpUitl.getBasicAuth(privateAuth.getUserName(), privateAuth.getPassword(), url);
 
-        if (HttpStatus.OK.value() != response.code() ) {
+        if (HttpStatus.OK.value() != response.code()) {
             //如果不成功则返回空
             log.error(Log.newInstance(op, "请求http异常").toString());
             return null;
         }
-
 
         List<T> list = JSONObject.parseArray(response.body().string(), clazz);
 

@@ -25,4 +25,15 @@ public interface ProductDao {
     ProductDO query(@Param("spu")String spu);
 
     List<ProductDO> queryAll();
+
+    /**
+     * 更新产品信息
+     *
+     * @author puffer
+     * @date 2020年07月03日 14:25:42
+     * @since 1.0.0
+     * @param productDO
+     * @return
+     */
+    int updateTitle(@Param("po") ProductDO productDO);
 }

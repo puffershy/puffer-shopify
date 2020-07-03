@@ -3,7 +3,7 @@ package com.puffer.shopify.common.enums;
 /**
  * 语言枚举
  *
- * @author buyi
+ * @author puffer
  * @date 2020年06月09日 09:50:18
  * @since 1.0.0
  */

@@ -3,6 +3,7 @@ package com.puffer.shopify.service;
 import com.puffer.shopify.Application;
 import com.puffer.shopify.common.constants.ShopifyUrlConstant;
 import com.puffer.shopify.config.ShopifyProperties;
+import com.puffer.shopify.service.shopify.ShopiftHttpService;
 import com.puffer.shopify.vo.shopify.ShopifyProduct;
 import com.puffer.shopify.vo.shopify.ShopifyProductWrapper;
 import org.springframework.boot.test.context.SpringBootTest;

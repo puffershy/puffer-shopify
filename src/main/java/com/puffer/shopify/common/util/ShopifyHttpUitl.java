@@ -85,14 +85,6 @@ public class ShopifyHttpUitl {
             return authClientMap.get(key);
         }
 
-//        OkHttpClient okHttpClient = new OkHttpClient.Builder().connectTimeout(30000L, TimeUnit.MILLISECONDS).readTimeout(30000L, TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
-//            @Override
-//            public Request authenticate(Route route, Response response) throws IOException {
-//                String credential = Credentials.basic(name, password);
-//                return response.request().newBuilder().header("Authorization", credential).build();
-//            }
-//        }).build();
-
         OkHttpClient okHttpClient = buildBasicAuthClient(name, password);
 
         authClientMap.put(key, okHttpClient);
@@ -101,7 +93,7 @@ public class ShopifyHttpUitl {
     }
 
     public static OkHttpClient buildBasicAuthClient(final String name, final String password) {
-        return new OkHttpClient.Builder().readTimeout(100000,TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
+        return new OkHttpClient.Builder().readTimeout(100000, TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 String credential = Credentials.basic(name, password);

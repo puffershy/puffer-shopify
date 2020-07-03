@@ -11,7 +11,9 @@ import com.puffer.shopify.mapper.ProductDao;
 import com.puffer.shopify.mapper.ProductImageDao;
 import com.puffer.shopify.mapper.ProductRankDao;
 import com.puffer.shopify.mapper.ProductVariantDao;
+import com.puffer.shopify.service.shopify.ShopifyProductService;
 import com.puffer.shopify.vo.ProductVO;
+import com.puffer.shopify.vo.shopify.ShopifyProduct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +45,9 @@ public class ProductService {
 
     @Resource
     private ProductVariantDao productVariantDao;
+
+    @Resource
+    private ShopifyProductService shopifyProductService;
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveProductVO(ProductVO productVO) {
@@ -113,6 +118,15 @@ public class ProductService {
         return buildProductVO(productDO);
     }
 
+    /**
+     * 更新产品信息
+     *
+     * @param productVO
+     * @return
+     * @author puffer
+     * @date 2020年07月03日 14:19:17
+     * @since 1.0.0
+     */
     public void updateProductVO(ProductVO productVO) {
         //更新图片url
         List<ProductImageDO> productImageDOList = productVO.getProductImageDOList();
@@ -124,6 +138,30 @@ public class ProductService {
                 }
             }
         }
+    }
+
+    /**
+     * 从shopify更新产品信息到本地
+     *
+     * @param productDO
+     * @author puffer
+     * @date 2020年07月03日 14:20:50
+     * @since 1.0.0
+     */
+    public void updateFromShopify(ProductDO productDO) {
+
+        //step1. 查询shopify产品信息
+        ShopifyProduct shopifyProduct = shopifyProductService.queryProduct(productDO.getProductId());
+
+        if (shopifyProduct == null) {
+            productDO.setState(ProductStateEnum.DELETE.getValue());
+        } else {
+            productDO.setTitle(shopifyProduct.getTitle());
+            productDO.setDescription(shopifyProduct.getBodyHtml());
+            productDO.setState(ProductStateEnum.EFFECTIVE.getValue());
+        }
+
+        productDao.updateTitle(productDO);
 
     }
 }

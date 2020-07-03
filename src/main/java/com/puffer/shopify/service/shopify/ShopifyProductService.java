@@ -1,4 +1,4 @@
-package com.puffer.shopify.service;
+package com.puffer.shopify.service.shopify;
 
 import com.puffer.core.log.Log;
 import com.puffer.shopify.common.constants.ShopifyConstant;
@@ -17,7 +17,6 @@ import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,12 +35,20 @@ public class ShopifyProductService {
     @Resource
     private ProductDao productDao;
 
-    public void uploadProductList(List<ProductVO> productVOList){
+    /**
+     * 批量上传产品
+     *
+     * @param productVOList
+     * @return
+     * @author puffer
+     * @date 2020年07月03日 13:43:07
+     * @since 1.0.0
+     */
+    public void uploadProductList(List<ProductVO> productVOList) {
         productVOList.forEach(productVO -> {
             this.uploadProduct(productVO);
         });
     }
-
 
     /**
      * 上传产品
@@ -54,12 +61,8 @@ public class ShopifyProductService {
      */
 
     public void uploadProduct(ProductVO productVO) {
-
         UploadProductVO uploadProductVO = buildUploadProductVO(productVO);
-
-
         ShopifyProductWrapper result = shopiftHttpService.post(ShopifyUrlConstant.PRODUCT_ADD, uploadProductVO, ShopifyProductWrapper.class);
-
         if (result == null) {
             return;
         }
@@ -70,11 +73,20 @@ public class ShopifyProductService {
         }
 
         int i = productDao.updateProductId(productVO.getSpu(), product.getId(), ProductFlowStateEnum.UPLOAD_SUCCESS.getValue());
-        if(i > 0){
-            log.info(Log.newInstance("","上传产品到shopify成功").kv("spu",productVO.getSpu()).toString());
+        if (i > 0) {
+            log.info(Log.newInstance("", "上传产品到shopify成功").kv("spu", productVO.getSpu()).toString());
         }
     }
 
+    /**
+     * 构建上传产品请求参数
+     *
+     * @param productVO
+     * @return com.puffer.shopify.vo.shopify.UploadProductVO
+     * @author puffer
+     * @date 2020年07月03日 13:43:39
+     * @since 1.0.0
+     */
     private UploadProductVO buildUploadProductVO(ProductVO productVO) {
         ProductDO productDO = productVO.getProductDO();
         List<ProductImageDO> productImageDOList = productVO.getProductImageDOList();
@@ -85,18 +97,14 @@ public class ShopifyProductService {
         uploadProductDetail.setVendor(ShopifyConstant.VENDOR);
         uploadProductDetail.setProductType(productDO.getType());
         uploadProductDetail.setTags(productDO.getMaterial());
-//        saveProductDetail.setPublished();
-//        saveProductDetail.setOptions();
+        //        saveProductDetail.setPublished();
+        //        saveProductDetail.setOptions();
 
-//        saveProductDetail.setMetafields();
+        //        saveProductDetail.setMetafields();
 
-
-
-
-        List<UploadProductVO.Image> images  = buildImages(productImageDOList);
+        List<UploadProductVO.Image> images = buildImages(productImageDOList);
 
         uploadProductDetail.setImages(images);
-
 
         UploadProductVO.Variant variant = new UploadProductVO.Variant();
         variant.setOption1("Default Title");
@@ -104,15 +112,22 @@ public class ShopifyProductService {
         variant.setCompareAtPrice(variant.getPrice().add(ShopifyConstant.ADD_COMPARE_PRICE));
         variant.setSku(productDO.getSpu());
 
-
         uploadProductDetail.setVariants(Lists.newArrayList(variant));
-
 
         UploadProductVO uploadProductVO = new UploadProductVO();
         uploadProductVO.setProduct(uploadProductDetail);
         return uploadProductVO;
     }
 
+    /**
+     * 构建产品图片
+     *
+     * @param productImageDOList
+     * @return java.util.List<com.puffer.shopify.vo.shopify.UploadProductVO.Image>
+     * @author puffer
+     * @date 2020年07月03日 13:44:08
+     * @since 1.0.0
+     */
     private List<UploadProductVO.Image> buildImages(List<ProductImageDO> productImageDOList) {
         List<UploadProductVO.Image> list = Lists.newArrayList();
 
@@ -128,9 +143,15 @@ public class ShopifyProductService {
         }
 
         return list;
-
-
     }
 
+    public ShopifyProduct queryProduct(String productId) {
+
+        String path = String.format(ShopifyUrlConstant.PRODUCT_SINGLE, productId);
+        ShopifyProductWrapper shopifyProductWrapper = shopiftHttpService.get(path, ShopifyProductWrapper.class);
+
+        ShopifyProduct product = shopifyProductWrapper.getProduct();
+        return product;
+    }
 
 }

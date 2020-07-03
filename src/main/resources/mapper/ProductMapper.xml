@@ -23,15 +23,23 @@
         update tb_product set flow_state = #{flowState},product_id = #{productId}
         where spu = #{spu}
     </update>
+    <update id="updateTitle">
+        update tb_product set title = #{title},description = #{description}, state = #{state}
+        where spu = #{spu}
+    </update>
     <select id="queryList" resultType="com.puffer.shopify.entity.ProductDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from tb_product where flow_state = #{flowState} and state = #{state} limit #{size}
     </select>
     <select id="query" resultType="com.puffer.shopify.entity.ProductDO">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from tb_product where spu = #{spu}
     </select>
     <select id="queryAll" resultType="com.puffer.shopify.entity.ProductDO">
-        select  <include refid="Base_Column_List"/> from tb_product
+        select
+        <include refid="Base_Column_List"/>
+        from tb_product
     </select>
 </mapper>

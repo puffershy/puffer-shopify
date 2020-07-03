@@ -1,4 +1,4 @@
-package com.puffer.shopify.service;
+package com.puffer.shopify.service.shopify;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * shopify多语言生成服务
  *
- * @author buyi
+ * @author puffer
  * @date 2020年06月09日 09:56:39
  * @since 1.0.0
  */

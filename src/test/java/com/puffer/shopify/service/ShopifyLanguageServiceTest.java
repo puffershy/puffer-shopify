@@ -1,6 +1,7 @@
 package com.puffer.shopify.service;
 
 import com.puffer.shopify.AbstractTest;
+import com.puffer.shopify.service.shopify.ShopifyLanguageService;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;

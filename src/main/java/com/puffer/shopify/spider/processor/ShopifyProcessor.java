@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
- * @author buyi
+ * @author puffer
  * @date 2020年06月09日 09:24:38
  * @since
  */

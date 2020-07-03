@@ -3,7 +3,7 @@ package com.puffer.shopify.common.constants;
 /**
  * 产品常量
  *
- * @author buyi
+ * @author puffer
  * @date 2020年06月28日 20:07:31
  * @since 1.0.0
  */
@@ -20,7 +20,7 @@ public class ProductContant {
     /**
      * 可以微波炉，但是不能洗碗机
      *
-     * @author buyi
+     * @author puffer
      * @date 2020年06月28日 20:11:39
      * @param null
      * @return
