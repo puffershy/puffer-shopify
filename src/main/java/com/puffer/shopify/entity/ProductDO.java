@@ -45,6 +45,10 @@ public class ProductDO {
      */
     private String url;
 
+    private String newTitle;
+
+    private String newDescription;
+
     /**
      * 价格，单位：美元
      */

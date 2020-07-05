@@ -15,7 +15,8 @@ public enum ProductFlowStateEnum {
     /**
      * 上传成功
      */
-    UPLOAD_SUCCESS(10);
+    UPLOAD_SUCCESS(10),
+    UPDATE_FROM_SHOPIFY(11);
 
     private int value;
 

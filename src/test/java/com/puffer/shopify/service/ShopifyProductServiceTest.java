@@ -4,6 +4,7 @@ import com.puffer.shopify.AbstractTest;
 import com.puffer.shopify.common.enums.ProductFlowStateEnum;
 import com.puffer.shopify.service.shopify.ShopifyProductService;
 import com.puffer.shopify.vo.ProductVO;
+import com.puffer.shopify.vo.shopify.ShopifyProduct;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ public class ShopifyProductServiceTest extends AbstractTest {
     @Test
     public void testUploadProductList() {
 
-        int size = 200;
+        int size = 1;
         List<ProductVO> productVOList = productService.queryList(ProductFlowStateEnum.TO_UPLOAD,size);
 
         shopifyProductService.uploadProductList(productVOList);
@@ -40,7 +41,8 @@ public class ShopifyProductServiceTest extends AbstractTest {
 
     @Test
     public void testQueryProduct() throws IOException {
-        String productId= "4635414626367";
-        shopifyProductService.queryProduct(productId);
+        String productId= "46354173133431";
+        ShopifyProduct shopifyProduct = shopifyProductService.queryProduct(productId);
+        System.out.println(shopifyProduct);
     }
 }

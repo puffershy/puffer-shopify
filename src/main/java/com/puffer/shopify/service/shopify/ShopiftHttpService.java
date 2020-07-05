@@ -87,9 +87,9 @@ public class ShopiftHttpService {
     public <T> T get(String path, Class<T> clazz) {
         final String op = "ShopiftHttpService.get";
         OkHttpClient client = instanceClient();
-        String url = shopifyProperties.getDomainUrl().concat(path);
+        String url = shopifyProperties.getAdminApi().concat(path);
 
-        Request request = new Request.Builder()
+        Request request = new Request.Builder().get()
                 .url(url)
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .build();

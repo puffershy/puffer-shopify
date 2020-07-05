@@ -140,6 +140,7 @@ public class ProductService {
         }
     }
 
+
     /**
      * 从shopify更新产品信息到本地
      *
@@ -159,6 +160,7 @@ public class ProductService {
             productDO.setTitle(shopifyProduct.getTitle());
             productDO.setDescription(shopifyProduct.getBodyHtml());
             productDO.setState(ProductStateEnum.EFFECTIVE.getValue());
+            productDO.setFlowState(ProductFlowStateEnum.UPDATE_FROM_SHOPIFY.getValue());
         }
 
         productDao.updateTitle(productDO);

@@ -3,7 +3,9 @@
 <mapper namespace="com.puffer.shopify.mapper.ProductDao">
     <sql id="Base_Column_List">
     id AS id, spu AS spu, type AS type, material AS material, title AS title, description AS description, amazon_price AS amazonPrice,
-    url AS url, shopify_price AS shopifyPrice, product_id AS productId, free_shipping AS freeShipping, flow_state AS flowState,
+    url AS url,
+    new_title AS newTitle, new_description AS newDescription,
+    shopify_price AS shopifyPrice, product_id AS productId, free_shipping AS freeShipping, flow_state AS flowState,
     state AS state, create_time AS createTime, update_time AS updateTime
   </sql>
 
@@ -24,8 +26,8 @@
         where spu = #{spu}
     </update>
     <update id="updateTitle">
-        update tb_product set title = #{title},description = #{description}, state = #{state}
-        where spu = #{spu}
+        update tb_product set state = #{po.state},flow_state = #{po.flowState}
+        where spu = #{po.spu}
     </update>
     <select id="queryList" resultType="com.puffer.shopify.entity.ProductDO">
         select
