@@ -16,12 +16,16 @@ public enum ProductSafeLevelEnum {
     /**
      * 微波炉安全，洗碗机不安全
      */
-    MICROWAVE_SAFE_DISHWASHER_NOT(2, "Microwave safe, but not dishwasher safe"),
+    ONLY_MICROWAVE(2, "Microwave safe, but not dishwasher safe"),
 
     /**
      * 微波炉不安全，洗碗机不安全
      */
-    BOTH_NOT(3, "Not microwave safe and not dishwasher safe");
+    BOTH_NOT(3, "Not microwave safe and not dishwasher safe"),
+    /**
+     * 只能洗碗机
+     */
+    ONLY_DISHWASHER(4, "Dishwasher safe");
 
     private int value;
     private String description;

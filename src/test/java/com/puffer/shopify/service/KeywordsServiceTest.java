@@ -1,14 +1,13 @@
 package com.puffer.shopify.service;
 
 import com.puffer.shopify.AbstractTest;
+import com.puffer.shopify.common.enums.KeywordTypeEnum;
 import org.assertj.core.util.Lists;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
-
-import static org.testng.Assert.*;
 
 public class KeywordsServiceTest extends AbstractTest {
 
@@ -21,7 +20,7 @@ public class KeywordsServiceTest extends AbstractTest {
 
         List<String> fileList = Lists.newArrayList(dir.concat("1.xlsx"));
 
-        keywordsService.saveCompite(fileList);
+        keywordsService.saveCompite(fileList, KeywordTypeEnum.QUOTE);
 
     }
 }

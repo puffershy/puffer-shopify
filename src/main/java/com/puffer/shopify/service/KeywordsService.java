@@ -1,6 +1,8 @@
 package com.puffer.shopify.service;
 
+import com.puffer.core.log.Log;
 import com.puffer.shopify.common.constants.ConfigConstant;
+import com.puffer.shopify.common.enums.KeywordTypeEnum;
 import com.puffer.shopify.entity.KeywordDO;
 import com.puffer.shopify.mapper.KeywordDao;
 import com.puffer.util.lang.ExcelUtil;
@@ -24,11 +26,13 @@ public class KeywordsService {
     @Resource
     private KeywordDao keywordDao;
 
-    public void saveCompite(List<String> fileList) throws IOException {
+    public void saveCompite(List<String> fileList, KeywordTypeEnum keywordTypeEnum) throws IOException {
+        final String op = "KeywordsService.saveCompite";
+        log.info(Log.newInstance(op, "更新关键词库").kv("keywordTypeEnum", keywordTypeEnum.toString()).toString());
         initKeywords();
 
         for (String s : fileList) {
-            saveKeywords(s);
+            saveKeywords(s, keywordTypeEnum);
         }
     }
 
@@ -36,11 +40,12 @@ public class KeywordsService {
      * 保存关键字
      *
      * @param filePath
+     * @param keywordTypeEnum
      * @author puffer
      * @date 2020年06月26日 21:58:55
      * @since 1.0.0
      */
-    public void saveKeywords(String filePath) throws IOException {
+    public void saveKeywords(String filePath, KeywordTypeEnum keywordTypeEnum) throws IOException {
         List<KeywordDO> keywordDOS = Lists.newArrayList();
 
         List<KeywordDO> updateKeywordList = Lists.newArrayList();
@@ -49,7 +54,6 @@ public class KeywordsService {
         List<Object[]> objects = ExcelUtil.readFile(filePath, 3);
         for (Object[] object : objects) {
 
-            // System.out.println(j++);
             String keyword = String.valueOf(object[0]).trim();
 
             int i = 0;
@@ -63,6 +67,7 @@ public class KeywordsService {
                 KeywordDO keywordDO = new KeywordDO();
                 keywordDO.setKeyword(keyword);
                 keywordDO.setSearches(i);
+                keywordDO.setType(keywordTypeEnum.getValue());
                 updateKeywordList.add(keywordDO);
                 continue;
             } else {
@@ -72,6 +77,7 @@ public class KeywordsService {
             KeywordDO keywordDO = new KeywordDO();
             keywordDO.setKeyword(keyword);
             keywordDO.setSearches(i);
+            keywordDO.setType(keywordTypeEnum.getValue());
             keywordDOS.add(keywordDO);
 
             if (keywordDOS.size() == ConfigConstant.QUERY_SIZE) {
@@ -83,12 +89,12 @@ public class KeywordsService {
 
         if (!keywordDOS.isEmpty()) {
             keywordDao.saveList(keywordDOS);
-            log.info("保存关键词" + keywordDOS.size());
+            log.info("保存关键词数量" + keywordDOS.size());
         }
 
         if (!updateKeywordList.isEmpty()) {
             keywordDao.updateList(updateKeywordList);
-            log.info("更新关键字查询量" + updateKeywordList.size());
+            log.info("更新关键字数量" + updateKeywordList.size());
         }
     }
 

@@ -10,4 +10,6 @@ public class KeywordDO {
     private String keyword;
 
     private Integer searches;
+
+    private String type;
 }
