@@ -2,6 +2,8 @@ package com.puffer.shopify.service;
 
 import com.google.common.collect.Lists;
 import com.puffer.core.log.Log;
+import com.puffer.shopify.common.enums.ColorEnum;
+import com.puffer.shopify.common.enums.ForTypeEnum;
 import com.puffer.shopify.common.enums.ProductFlowStateEnum;
 import com.puffer.shopify.common.enums.ProductStateEnum;
 import com.puffer.shopify.entity.ProductDO;
@@ -11,9 +13,12 @@ import com.puffer.shopify.mapper.ProductDao;
 import com.puffer.shopify.mapper.ProductImageDao;
 import com.puffer.shopify.mapper.ProductRankDao;
 import com.puffer.shopify.mapper.ProductVariantDao;
+import com.puffer.shopify.service.amazon.AmazonService;
 import com.puffer.shopify.service.shopify.ShopifyProductService;
+import com.puffer.shopify.vo.ProductExcelVO;
 import com.puffer.shopify.vo.ProductVO;
 import com.puffer.shopify.vo.shopify.ShopifyProduct;
+import com.puffer.util.lang.ExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 产品服务
@@ -48,6 +55,17 @@ public class ProductService {
 
     @Resource
     private ShopifyProductService shopifyProductService;
+
+
+    @Resource
+    private ThreadLocalService threadLocalService;
+
+    @Resource
+    private AmazonService amazonService;
+
+    @Resource
+    private KeywordsService keywordsService;
+
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveProductVO(ProductVO productVO) {
@@ -164,6 +182,48 @@ public class ProductService {
         }
 
         productDao.updateTitle(productDO);
+    }
+
+
+    public void collectProduct(String filePath) throws IOException {
+
+
+        Map<String, ProductExcelVO> productExcelVOMap = threadLocalService.queryProductExcel();
+        //step1. 读取excel信息
+        List<Object[]> objects = ExcelUtil.readFile(filePath, 1);
+        List<String> urls = Lists.newArrayList();
+
+        for (Object[] object : objects) {
+            ProductExcelVO productExcelVO = new ProductExcelVO();
+            productExcelVO.setUrl(String.valueOf(object[0]).trim());
+            productExcelVO.setSource(String.valueOf(object[1]).trim());
+            productExcelVO.setColor(ColorEnum.fromValue(String.valueOf(object[2]).trim()));
+            productExcelVO.setForType(ForTypeEnum.from(String.valueOf(object[3]).trim()));
+//            productExcelVO.setTitle();
+//            productExcelVO.setDescrption();
+//            productExcelVO.setPrice();
+//            productExcelVO.setKeywords();
+//            productExcelVO.setNewTitle();
+//            productExcelVO.setNewDescription();
+//            productExcelVO.setNewPrice();
+//            productExcelVO.setImageUrl();
+
+            urls.add(productExcelVO.getUrl());
+            productExcelVOMap.put(productExcelVO.getUrl(), productExcelVO);
+        }
+
+        //step.2 触发amazon爬虫
+        amazonService.processExcel(urls);
+
+        //step3. 匹配关键词
+
+        //step4. 生成新的标题
+        //step5. 生成新的描述
+        //step6. 保存产品信息到数据库
+        //step7. 上传产品到shopify
+        //step8.  发布产品
+
 
     }
+
 }

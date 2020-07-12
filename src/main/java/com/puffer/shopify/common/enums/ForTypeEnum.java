@@ -17,6 +17,15 @@ public enum ForTypeEnum {
         this.description = description;
     }
 
+    public static ForTypeEnum from(String value) {
+        for (ForTypeEnum forTypeEnum : ForTypeEnum.values()) {
+            if (forTypeEnum.getValue().equals(value)) {
+                return forTypeEnum;
+            }
+        }
+        return null;
+    }
+
     public String getValue() {
         return value;
     }

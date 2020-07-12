@@ -1,5 +1,7 @@
 package com.puffer.shopify.common.enums;
 
+import org.apache.commons.lang3.StringUtils;
+
 public enum ColorEnum {
     /**
      * 白色
@@ -21,5 +23,20 @@ public enum ColorEnum {
 
     public String getDescription() {
         return description;
+    }
+
+    public static ColorEnum fromValue(String value){
+        if (StringUtils.isBlank(value)) {
+            //如果传餐为空，则默认返回null
+            return null;
+        }
+
+        for (ColorEnum colorEnum : ColorEnum.values()) {
+            if (colorEnum.getValue().equals(value)) {
+                return colorEnum;
+            }
+        }
+
+        return null;
     }
 }
