@@ -56,7 +56,6 @@ public class ProductService {
     @Resource
     private ShopifyProductService shopifyProductService;
 
-
     @Resource
     private ThreadLocalService threadLocalService;
 
@@ -65,7 +64,6 @@ public class ProductService {
 
     @Resource
     private KeywordsService keywordsService;
-
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void saveProductVO(ProductVO productVO) {
@@ -158,7 +156,6 @@ public class ProductService {
         }
     }
 
-
     /**
      * 从shopify更新产品信息到本地
      *
@@ -184,9 +181,7 @@ public class ProductService {
         productDao.updateTitle(productDO);
     }
 
-
     public void collectProduct(String filePath) throws IOException {
-
 
         Map<String, ProductExcelVO> productExcelVOMap = threadLocalService.queryProductExcel();
         //step1. 读取excel信息
@@ -199,31 +194,41 @@ public class ProductService {
             productExcelVO.setSource(String.valueOf(object[1]).trim());
             productExcelVO.setColor(ColorEnum.fromValue(String.valueOf(object[2]).trim()));
             productExcelVO.setForType(ForTypeEnum.from(String.valueOf(object[3]).trim()));
-//            productExcelVO.setTitle();
-//            productExcelVO.setDescrption();
-//            productExcelVO.setPrice();
-//            productExcelVO.setKeywords();
-//            productExcelVO.setNewTitle();
-//            productExcelVO.setNewDescription();
-//            productExcelVO.setNewPrice();
-//            productExcelVO.setImageUrl();
+            //            productExcelVO.setTitle();
+            //            productExcelVO.setDescrption();
+            //            productExcelVO.setPrice();
+            //            productExcelVO.setKeywords();
+            //            productExcelVO.setNewTitle();
+            //            productExcelVO.setNewDescription();
+            //            productExcelVO.setNewPrice();
+            //            productExcelVO.setImageUrl();
 
             urls.add(productExcelVO.getUrl());
             productExcelVOMap.put(productExcelVO.getUrl(), productExcelVO);
         }
 
-        //step.2 触发amazon爬虫
+        //step.2 触发爬虫
         amazonService.processExcel(urls);
+
+        List<String[]> lines = Lists.newArrayList();
+        lines.add(ProductExcelVO.createTitle());
+        productExcelVOMap.values().forEach(productExcelVO -> {
+            lines.add(productExcelVO.transfer());
+        });
+
+        ExcelUtil.createFile(filePath, lines);
 
         //step3. 匹配关键词
 
         //step4. 生成新的标题
         //step5. 生成新的描述
         //step6. 保存产品信息到数据库
-        //step7. 上传产品到shopify
-        //step8.  发布产品
+        //step7. 上传产品到store
+        //step8. 发布产品
+    }
 
-
+    public static void main(String[] args) {
+        System.out.println(System.getProperty("user.dir"));
     }
 
 }
