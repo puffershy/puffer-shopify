@@ -14,12 +14,12 @@ import java.util.List;
 public class ShopifyImage {
     private String id;
     private String productId;
-    private int position;
+    private Integer position;
     private String createdAt;
     private String updateAt;
     private String alt;
-    private long width;
-    private long height;
+    private Long width;
+    private Long height;
     private String src;
     private List<String> variantIds = new LinkedList<>();
     private String adminGraphqlApiId;

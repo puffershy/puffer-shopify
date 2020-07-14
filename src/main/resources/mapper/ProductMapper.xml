@@ -26,7 +26,11 @@
         where spu = #{spu}
     </update>
     <update id="updateTitle">
-        update tb_product set state = #{po.state},flow_state = #{po.flowState}
+        update tb_product set
+        state = #{po.state},
+        flow_state = #{po.flowState},
+        new_title = #{po.newTitle},
+        new_description= #{po.newDescription}
         where spu = #{po.spu}
     </update>
     <select id="queryList" resultType="com.puffer.shopify.entity.ProductDO">

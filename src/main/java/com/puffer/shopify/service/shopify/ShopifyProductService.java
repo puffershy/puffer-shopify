@@ -92,8 +92,8 @@ public class ShopifyProductService {
         List<ProductImageDO> productImageDOList = productVO.getProductImageDOList();
 
         UploadProductVO.SaveProductDetail uploadProductDetail = new UploadProductVO.SaveProductDetail();
-        uploadProductDetail.setTitle(productDO.getTitle());
-        uploadProductDetail.setBodyHtml(productDO.getDescription());
+        uploadProductDetail.setTitle(productDO.getNewTitle());
+        uploadProductDetail.setBodyHtml(productDO.getNewDescription());
         uploadProductDetail.setVendor(ShopifyConstant.VENDOR);
         uploadProductDetail.setProductType(productDO.getType());
         uploadProductDetail.setTags(productDO.getMaterial());
@@ -102,7 +102,7 @@ public class ShopifyProductService {
 
         //        saveProductDetail.setMetafields();
 
-        List<UploadProductVO.Image> images = buildImages(productImageDOList);
+        List<UploadProductVO.Image> images = buildImages(productImageDOList, productDO.getNewTitle());
 
         uploadProductDetail.setImages(images);
 
@@ -123,16 +123,18 @@ public class ShopifyProductService {
      * 构建产品图片
      *
      * @param productImageDOList
+     * @param alt
      * @return java.util.List<com.puffer.shopify.vo.shopify.UploadProductVO.Image>
      * @author puffer
      * @date 2020年07月03日 13:44:08
      * @since 1.0.0
      */
-    private List<UploadProductVO.Image> buildImages(List<ProductImageDO> productImageDOList) {
+    private List<UploadProductVO.Image> buildImages(List<ProductImageDO> productImageDOList, String alt) {
         List<UploadProductVO.Image> list = Lists.newArrayList();
 
         for (ProductImageDO productImageDO : productImageDOList) {
             UploadProductVO.Image image = new UploadProductVO.Image();
+            image.setAlt(alt);
             if (StringUtils.isNotBlank(productImageDO.getImageUrl())) {
                 image.setSrc(productImageDO.getImageUrl());
             } else {
@@ -145,13 +147,42 @@ public class ShopifyProductService {
         return list;
     }
 
+    /**
+     * 查询产品
+     *
+     * @param productId
+     * @return com.puffer.shopify.vo.shopify.ShopifyProduct
+     * @author puffer
+     * @date 2020年07月14日 23:33:42
+     * @since 1.0.0
+     */
     public ShopifyProduct queryProduct(String productId) {
-
         String path = String.format(ShopifyUrlConstant.PRODUCT_SINGLE, productId);
         ShopifyProductWrapper shopifyProductWrapper = shopiftHttpService.get(path, ShopifyProductWrapper.class);
 
         ShopifyProduct product = shopifyProductWrapper.getProduct();
         return product;
+    }
+
+    /**
+     * 更新产品信息
+     *
+     * @param shopifyProduct
+     * @return com.puffer.shopify.vo.shopify.ShopifyProduct
+     * @author puffer
+     * @date 2020年07月14日 23:44:02
+     * @since 1.0.0
+     */
+    public ShopifyProduct updateProduct(ShopifyProduct shopifyProduct) {
+
+        String path = String.format(ShopifyUrlConstant.PRODUCT_SINGLE, shopifyProduct.getId());
+        ShopifyProductWrapper shopifyProductWrapper1 = new ShopifyProductWrapper();
+        shopifyProductWrapper1.setProduct(shopifyProduct);
+
+
+        ShopifyProductWrapper shopifyProductWrapper = shopiftHttpService.put(path, shopifyProductWrapper1, ShopifyProductWrapper.class);
+
+        return shopifyProductWrapper.getProduct();
     }
 
 }

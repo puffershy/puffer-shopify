@@ -9,14 +9,19 @@ import com.puffer.shopify.common.enums.ShopifyRelEnum;
 import com.puffer.shopify.common.model.Page;
 import com.puffer.shopify.common.util.ShopifyHttpUitl;
 import com.puffer.shopify.config.ShopifyProperties;
+import com.puffer.shopify.vo.shopify.ShopifyProductWrapper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.poi.hssf.record.formula.functions.T;
+import org.apache.poi.openxml4j.opc.PackagePart;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import sun.jvm.hotspot.oops.Oop;
+import sun.jvm.hotspot.runtime.ppc.PPCCurrentFrameGuess;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -148,4 +153,27 @@ public class ShopiftHttpService {
         return page;
     }
 
+
+    public <T> T put(String path, Object object, Class<T> clazz) {
+        final  String op = "put";
+        OkHttpClient client = instanceClient();
+        String url = shopifyProperties.getAdminApi().concat(path);
+
+        RequestBody requestBody = RequestBody.create(ShopifyHttpUitl.TYPE_JSON, JSON.toJSONString(object));
+
+        Request request = new Request.Builder().put(requestBody)
+                .url(url)
+                .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            log.info("http请求响应参数：" + string);
+            return JSONObject.parseObject(string, clazz);
+        } catch (Exception e) {
+            log.error(Log.newInstance(op, "shopify http exception").toString(), e);
+            throw CommonExceptionCode.SYS_ERROR.exception();
+        }
+    }
 }

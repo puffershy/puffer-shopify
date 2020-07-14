@@ -105,6 +105,8 @@ public class UploadProductVO {
          * 图片 base64
          */
         private String attachment;
+
+        private String alt;
     }
 
     @Data

@@ -184,8 +184,11 @@ public class ProductService {
         if (shopifyProduct == null) {
             productDO.setState(ProductStateEnum.DELETE.getValue());
         } else {
-            productDO.setTitle(shopifyProduct.getTitle());
-            productDO.setDescription(shopifyProduct.getBodyHtml());
+//            productDO.setTitle(shopifyProduct.getTitle());
+////            productDO.setDescription(shopifyProduct.getBodyHtml());
+////
+            productDO.setNewTitle(shopifyProduct.getTitle());
+            productDO.setNewDescription(shopifyProduct.getBodyHtml());
             productDO.setState(ProductStateEnum.EFFECTIVE.getValue());
             productDO.setFlowState(ProductFlowStateEnum.UPDATE_FROM_SHOPIFY.getValue());
         }
