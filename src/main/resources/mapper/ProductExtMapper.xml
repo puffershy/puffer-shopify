@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puffer.shopify.mapper.ProductExtDao">
+    <sql id="Base_Column_List">
+    id AS id, spu AS spu, color AS color, for_type AS forType, capacity AS capacity, 
+    safe_level AS safeLevel, quotes AS quotes, create_time AS createTime, update_time AS updateTime
+  </sql>
+    <insert id="insert" parameterType="com.puffer.shopify.entity.ProductExtDO">
+    insert into tb_product_ext (id, spu, color, 
+      for_type, capacity, safe_level,
+      quotes
+      )
+    values (#{id,jdbcType=INTEGER}, #{spu,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{forType,jdbcType=VARCHAR}, #{capacity,jdbcType=INTEGER}, #{safeLevel,jdbcType=INTEGER},
+      #{quotes,jdbcType=VARCHAR}
+      )
+  </insert>
+    <select id="query" resultType="com.puffer.shopify.entity.ProductExtDO">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_product_ext where spu = #{spu}
+    </select>
+</mapper>

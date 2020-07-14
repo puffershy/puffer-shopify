@@ -12,11 +12,14 @@ public class ProductExcelVO {
     private String source;
     private ColorEnum color;
     private ForTypeEnum forType;
+    private String quotes;
+    private Integer capacity;
+    private Integer safeLevel;
+    private BigDecimal price;
 
     private String spu;
     private String title;
     private String description;
-    private BigDecimal price;
     private String keywords;
     private String newTitle;
     private String newDescription;
@@ -24,40 +27,45 @@ public class ProductExcelVO {
     private String imageUrl;
 
     public static String[] createTitle() {
-        String[] title = new String[13];
-        title[0] = "spu";
-        title[1] = "url";
-        title[2] = "source";
-        title[3] = "color";
-        title[4] = "for";
-        title[5] = "quotes";
-        title[6] = "title";
-        title[7] = "description";
-        title[8] = "price";
-        title[9] = "keywords";
-        title[10] = "newTitle";
-        title[11] = "newDescription";
-        title[12] = "newPrice";
-        title[13] = "imageUrl";
+        String[] title = new String[16];
+        title[0] = "url";
+        title[1] = "source";
+        title[2] = "color";
+        title[3] = "for";
+        title[4] = "quotes";
+        title[5] = "capacity";
+        title[6] = "safeLevel";
+        title[7] = "price";
+        title[8] = "spu";
+        title[9] = "title";
+        title[10] = "description";
+        title[11] = "keywords";
+        title[12] = "newTitle";
+        title[13] = "newDescription";
+        title[14] = "newPrice";
+        title[15] = "imageUrl";
         return title;
     }
 
     public String[] transfer() {
-        String[] title = new String[13];
-        title[0] = getSpu();
-        title[1] = getUrl();
-        title[2] = getSource();
-        title[3] = getColor().getValue();
-        title[4] = getForType().getValue();
-        title[5] = "";
-        title[6] = getTitle();
-        title[7] = getDescription();
-        title[8] = getPrice().toString();
-        title[9] = "";
-        title[10] = "";
-        title[11] = "";
-        title[12] = "";
-        title[13] = getImageUrl();
+        String[] title = new String[16];
+        title[0] = getUrl();
+        title[1] = getSource();
+        title[2] = getColor() != null ? getColor().getValue() : "";
+        title[3] = getForType() != null ? getForType().getValue() : "";
+        title[4] = getQuotes();
+        title[5] = getCapacity().toString();
+        title[6] = getSafeLevel().toString();
+        title[7] = getPrice().toString();
+        title[8] = getSpu();
+        title[9] = getTitle();
+        title[10] = getDescription();
+        title[11] = getKeywords();
+        title[12] = getNewTitle();
+        title[13] = getNewDescription();
+        title[14] = getNewPrice().toString();
+        title[15] = getImageUrl();
+
         return title;
     }
 

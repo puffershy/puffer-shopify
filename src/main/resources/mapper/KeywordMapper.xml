@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.puffer.shopify.mapper.KeywordDao">
     <sql id="Base_Column_List">
-    id AS id, keyword AS keyword, searches AS searches, type AS type
+    id AS id, keyword AS keyword, searches AS searches
   </sql>
 
     <insert id="saveList" parameterType="com.puffer.shopify.entity.KeywordDO">
-        insert into tb_keyword (keyword, searches,type)
+        insert into tb_keyword (id,keyword, searches)
         values
         <foreach collection="list" item="po" separator=",">
-            (#{po.keyword},#{po.searches}, #{po.type})
+            (#{po.id}, #{po.keyword},#{po.searches})
         </foreach>
     </insert>
     <update id="updateList">
         <foreach collection="list" item="po" separator=";">
-            update tb_keyword set searches = #{po.searches}, type = #{po.type} where keyword = #{po.keyword}
+            update tb_keyword set searches = #{po.searches} where keyword = #{po.keyword}
         </foreach>
     </update>
     <select id="queryCount" resultType="java.lang.Integer">

@@ -1,6 +1,7 @@
 package com.puffer.shopify.vo;
 
 import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.entity.ProductExtDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.entity.ProductVariantDO;
@@ -39,6 +40,8 @@ public class ProductVO {
      * 产品图片信息
      */
     private List<ProductImageDO> productImageDOList;
+
+    private ProductExtDO productExtDO;
 
 
     public String getSpu(){

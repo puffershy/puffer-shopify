@@ -27,6 +27,8 @@ public class AmazonExcelPipeline implements Pipeline {
     @Resource
     private ThreadLocalService threadLocalService;
 
+
+
     @Override
     public void process(ResultItems resultItems, Task task) {
         ProductVO productVO = resultItems.get("productVO");

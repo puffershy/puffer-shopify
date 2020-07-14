@@ -5,11 +5,9 @@ import lombok.Data;
 
 @Data
 public class KeywordDO {
-    private Integer id;
+    private Long id;
 
     private String keyword;
 
     private Integer searches;
-
-    private String type;
 }

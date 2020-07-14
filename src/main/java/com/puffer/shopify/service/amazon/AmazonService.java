@@ -1,7 +1,6 @@
 package com.puffer.shopify.service.amazon;
 
 import com.puffer.shopify.common.constants.AmazonConstant;
-import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.service.ProductService;
 import com.puffer.shopify.spider.pipeline.AmazonExcelPipeline;
 import com.puffer.shopify.spider.pipeline.AmazonPipeline;
@@ -15,7 +14,6 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AmazonService {
@@ -26,14 +24,18 @@ public class AmazonService {
     @Resource
     private AmazonUpdatePipeline amazonUpdatePipeline;
 
+    /**
+     * 更新图片
+     */
+    @Resource
+    private AmazonExcelPipeline amazonExcelPipeline;
+
     @Resource
     private ProductService productService;
 
     @Resource
     private AmazonPageProcessor amazonPageProcessor;
 
-    @Resource
-    private AmazonExcelPipeline amazonExcelPipeline;
 
 
     /**
@@ -52,21 +54,21 @@ public class AmazonService {
     /**
      * 爬取amazon产品信息
      *
-     * @param url
+     * @param urlList
      * @return void
      * @author puffer
      * @date 2020年07月11日 09:17:12
      * @since 1.0.0
      */
-    public void process(String url) {
-//        Spider.create(amazonPageProcessor)
-//                .addUrl(url)
-//                .addPipeline(amazonPipeline)
-//                //开启5个线程抓取
-//                .thread(AmazonConstant.SPIDER_THREAD_NUM)
-//                //启动爬虫
-//                .run();
-        instanceSpirder(amazonPipeline, Lists.newArrayList(url)).run();
+    public void process(List<String> urlList) {
+       Spider.create(amazonPageProcessor)
+               .addUrl(urlList.toArray(new String[urlList.size()]))
+               .addPipeline(amazonPipeline)
+               //开启5个线程抓取
+               .thread(AmazonConstant.SPIDER_THREAD_NUM)
+               //启动爬虫
+               .run();
+        // instanceSpirder(amazonPipeline, urlList).run();
     }
 
 //    public void updateImageList(List<ProductDO> productDOList) {

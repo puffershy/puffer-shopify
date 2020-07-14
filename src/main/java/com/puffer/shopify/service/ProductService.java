@@ -7,9 +7,11 @@ import com.puffer.shopify.common.enums.ForTypeEnum;
 import com.puffer.shopify.common.enums.ProductFlowStateEnum;
 import com.puffer.shopify.common.enums.ProductStateEnum;
 import com.puffer.shopify.entity.ProductDO;
+import com.puffer.shopify.entity.ProductExtDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.entity.ProductRankDO;
 import com.puffer.shopify.mapper.ProductDao;
+import com.puffer.shopify.mapper.ProductExtDao;
 import com.puffer.shopify.mapper.ProductImageDao;
 import com.puffer.shopify.mapper.ProductRankDao;
 import com.puffer.shopify.mapper.ProductVariantDao;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +46,9 @@ import java.util.Map;
 public class ProductService {
     @Resource
     private ProductDao productDao;
+
+    @Resource
+    private ProductExtDao productExtDao;
 
     @Resource
     private ProductRankDao productRankDao;
@@ -93,9 +99,13 @@ public class ProductService {
             //            if (CollectionUtils.isNotEmpty(variantDOList)) {
             //                productVariantDao.insertList(variantDOList);
             //            }
+
+            //step5.保存产品扩展信息
+            productExtDao.insert(productVO.getProductExtDO());
+
         } catch (Exception e) {
             log.error(Log.newInstance("", "保存数据异常").kv("spu", productVO.getProductDO().getSpu()).kv("url", productVO.getProductDO().getUrl()).toString(), e);
-            // throw e;
+            throw e;
         }
     }
 
@@ -126,7 +136,9 @@ public class ProductService {
             return null;
         }
 
-        return ProductVO.builder().productDO(productDO).productImageDOList(productImageDOS).build();
+        ProductExtDO productExtDO = productExtDao.query(productDO.getSpu());
+
+        return ProductVO.builder().productDO(productDO).productImageDOList(productImageDOS).productExtDO(productExtDO).build();
     }
 
     public ProductVO query(String spu) {
@@ -189,11 +201,23 @@ public class ProductService {
         List<String> urls = Lists.newArrayList();
 
         for (Object[] object : objects) {
+            if (object[0] == null) {
+                continue;
+            }
+
             ProductExcelVO productExcelVO = new ProductExcelVO();
             productExcelVO.setUrl(String.valueOf(object[0]).trim());
             productExcelVO.setSource(String.valueOf(object[1]).trim());
             productExcelVO.setColor(ColorEnum.fromValue(String.valueOf(object[2]).trim()));
             productExcelVO.setForType(ForTypeEnum.from(String.valueOf(object[3]).trim()));
+            productExcelVO.setQuotes(String.valueOf(object[4]));
+            productExcelVO.setCapacity(Double.valueOf(object[5].toString()).intValue());
+            productExcelVO.setSafeLevel(Double.valueOf(object[6].toString()).intValue());
+
+            if (object.length >= 8 && StringUtils.isNotBlank(object[7].toString())) {
+                productExcelVO.setPrice(new BigDecimal(object[7].toString()));
+            }
+            // productExcelVO.setPrice(new BigDecimal());
             //            productExcelVO.setTitle();
             //            productExcelVO.setDescrption();
             //            productExcelVO.setPrice();
@@ -202,21 +226,23 @@ public class ProductService {
             //            productExcelVO.setNewDescription();
             //            productExcelVO.setNewPrice();
             //            productExcelVO.setImageUrl();
-
             urls.add(productExcelVO.getUrl());
             productExcelVOMap.put(productExcelVO.getUrl(), productExcelVO);
         }
 
         //step.2 触发爬虫
-        amazonService.processExcel(urls);
+        amazonService.process(urls);
 
-        List<String[]> lines = Lists.newArrayList();
-        lines.add(ProductExcelVO.createTitle());
-        productExcelVOMap.values().forEach(productExcelVO -> {
-            lines.add(productExcelVO.transfer());
-        });
+        //step3.生成新的excel
+        createExcel(ProductFlowStateEnum.TO_UPDATE_TITLE, filePath);
 
-        ExcelUtil.createFile(filePath, lines);
+        // List<String[]> lines = Lists.newArrayList();
+        // lines.add(ProductExcelVO.createTitle());
+        // productExcelVOMap.values().forEach(productExcelVO -> {
+        //     lines.add(productExcelVO.transfer());
+        // });
+        //
+        // ExcelUtil.createFile(filePath, lines);
 
         //step3. 匹配关键词
 
@@ -225,6 +251,46 @@ public class ProductService {
         //step6. 保存产品信息到数据库
         //step7. 上传产品到store
         //step8. 发布产品
+    }
+
+    public void createExcel(ProductFlowStateEnum flowStateEnum, String filePath) throws IOException {
+        List<ProductVO> productVOS = queryList(flowStateEnum, 100);
+
+        List<String[]> lines = Lists.newArrayList();
+        lines.add(ProductExcelVO.createTitle());
+
+        for (ProductVO productVO : productVOS) {
+            ProductDO productDO = productVO.getProductDO();
+            ProductExtDO productExtDO = productVO.getProductExtDO();
+            ProductImageDO productImageDO = productVO.getProductImageDOList().get(0);
+
+            ProductExcelVO productExcelVO = new ProductExcelVO();
+            productExcelVO.setUrl(productDO.getUrl());
+            productExcelVO.setSource("amazon");
+            productExcelVO.setColor(ColorEnum.fromValue(productExtDO.getColor()));
+            productExcelVO.setForType(ForTypeEnum.from(productExtDO.getForType()));
+            productExcelVO.setQuotes(productExtDO.getQuotes());
+            productExcelVO.setCapacity(productExtDO.getCapacity());
+            productExcelVO.setSafeLevel(productExtDO.getSafeLevel());
+            productExcelVO.setPrice(productDO.getAmazonPrice());
+            productExcelVO.setSpu(productDO.getSpu());
+            productExcelVO.setTitle(productDO.getTitle());
+            productExcelVO.setDescription(productDO.getDescription());
+            // productExcelVO.setKeywords("");
+            productExcelVO.setNewTitle("");
+            productExcelVO.setNewDescription("");
+            productExcelVO.setNewPrice(productDO.getShopifyPrice());
+            productExcelVO.setImageUrl(productImageDO.getImageUrl());
+
+            //查询关键词
+            String keyword = keywordsService.queryKeyword(productExcelVO.getForType());
+            productExcelVO.setKeywords(keyword);
+
+            lines.add(productExcelVO.transfer());
+        }
+
+        ExcelUtil.createFile(filePath, lines);
+
     }
 
     public static void main(String[] args) {

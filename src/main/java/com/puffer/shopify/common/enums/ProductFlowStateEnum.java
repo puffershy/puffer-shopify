@@ -3,9 +3,24 @@ package com.puffer.shopify.common.enums;
 public enum ProductFlowStateEnum {
 
     /**
+     * 初始化
+     */
+    INIT(0),
+
+    /**
+     * 待更新标题
+     */
+    TO_UPDATE_TITLE(2),
+
+    /**
+     * 待更新描述
+     */
+    TO_UPDATE_DESCRIPTION(3),
+
+    /**
      * 待上传
      */
-    TO_UPLOAD(0),
+    TO_UPLOAD(5),
 
     /**
      * 待更新图片
