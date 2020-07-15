@@ -19,6 +19,11 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "puffer.shopify")
 public class ShopifyProperties {
 
+    /**
+     * 是否代理，true 代理，flase-不是设置代理
+     */
+    private boolean proxy;
+
     @NotBlank
     private String domainUrl;
 
@@ -27,6 +32,14 @@ public class ShopifyProperties {
 
     @NotNull
     private PrivateAuth privateAuth;
+
+    public boolean isProxy() {
+        return proxy;
+    }
+
+    public void setProxy(boolean proxy) {
+        this.proxy = proxy;
+    }
 
     public String getDomainUrl() {
         return domainUrl;

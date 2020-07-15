@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.puffer.shopify.mapper.KeywordTagDao">
+    <sql id="Base_Column_List">
+    id AS id, keyword_id AS keywordId, code AS code, remark AS remark, create_time AS createTime, 
+    update_time AS updateTime
+  </sql>
+    <insert id="insert" parameterType="com.puffer.shopify.entity.KeywordTagDO">
+    insert into tb_keyword_tag (id, keyword_id, code, 
+      remark, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{keywordId,jdbcType=BIGINT}, #{code,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+    <insert id="saveList">
+        insert into tb_keyword_tag (keyword_id, code,
+        remark
+        )
+        values
+        <foreach collection="list" item="po" separator=",">
+            (#{po.keywordId,jdbcType=BIGINT}, #{po.code,jdbcType=INTEGER},
+            #{po.remark,jdbcType=VARCHAR} )
+        </foreach>
+
+    </insert>
+    <select id="queryByKeywordId" resultType="com.puffer.shopify.entity.KeywordTagDO">
+        select <include refid="Base_Column_List"/>
+        from tb_keyword_tag where keyword_id = #{keywordId}
+    </select>
+</mapper>

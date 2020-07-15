@@ -51,7 +51,7 @@ public class UploadProductVO {
         /**
          * 发布状态
          */
-        private boolean published = true;
+        private boolean published = false;
 
         private List<Variant> variants;
 

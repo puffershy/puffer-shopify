@@ -8,6 +8,8 @@ import com.puffer.shopify.entity.ProductDO;
 import com.puffer.shopify.entity.ProductImageDO;
 import com.puffer.shopify.mapper.ProductDao;
 import com.puffer.shopify.vo.ProductVO;
+import com.puffer.shopify.vo.shopify.ShopifyMetafield;
+import com.puffer.shopify.vo.shopify.ShopifyMetafieldWrapper;
 import com.puffer.shopify.vo.shopify.ShopifyProduct;
 import com.puffer.shopify.vo.shopify.ShopifyProductWrapper;
 import com.puffer.shopify.vo.shopify.UploadProductVO;
@@ -162,6 +164,13 @@ public class ShopifyProductService {
 
         ShopifyProduct product = shopifyProductWrapper.getProduct();
         return product;
+    }
+
+    public List<ShopifyMetafield> queryProductMetafields(String productId){
+        String path = String.format(ShopifyUrlConstant.PRODUCT_METAFIELDS, productId);
+        ShopifyMetafieldWrapper shopifyMetafieldWrapper = shopiftHttpService.get(path, ShopifyMetafieldWrapper.class);
+
+        return shopifyMetafieldWrapper.getMetafields();
     }
 
     /**

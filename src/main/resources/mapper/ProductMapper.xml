@@ -33,6 +33,10 @@
         new_description= #{po.newDescription}
         where spu = #{po.spu}
     </update>
+    <update id="updateFlowState">
+        update tb_product set flow_state = #{flowState}
+        where spu = #{spu}
+    </update>
     <select id="queryList" resultType="com.puffer.shopify.entity.ProductDO">
         select
         <include refid="Base_Column_List"/>

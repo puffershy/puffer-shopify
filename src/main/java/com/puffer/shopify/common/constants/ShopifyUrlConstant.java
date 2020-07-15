@@ -37,4 +37,6 @@ public class ShopifyUrlConstant {
      * Deletes a product
      */
     public static final String PRODUCT_SINGLE = "/products/%s.json";
+
+    public static final String PRODUCT_METAFIELDS = "/products/%s/metafields.json";
 }

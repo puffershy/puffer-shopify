@@ -11,6 +11,8 @@ import okhttp3.Route;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,12 +62,20 @@ public class ShopifyHttpUitl {
      * @since 1.0.0
      */
     public static OkHttpClient instanceBasicAuthClient(final String name, final String password) {
+        return instanceBasicAuthClient(name, password, false);
+    }
+
+    public static OkHttpClient instanceBasicAuthClientProxy(String userName, String password) {
+        return instanceBasicAuthClient(userName, password, true);
+    }
+
+    private static OkHttpClient instanceBasicAuthClient(final String name, final String password, boolean proxy) {
         String key = buildKey(name, password);
         if (authClientMap.containsKey(key)) {
             return authClientMap.get(key);
         }
 
-        return syncInstanceBasicAuthClient(name, password);
+        return syncInstanceBasicAuthClient(name, password, proxy);
     }
 
     /**
@@ -78,32 +88,47 @@ public class ShopifyHttpUitl {
      * @date 2020年05月15日 09:39:16
      * @since 1.0.0
      */
-    private static synchronized OkHttpClient syncInstanceBasicAuthClient(String name, String password) {
+    private static synchronized OkHttpClient syncInstanceBasicAuthClient(String name, String password, boolean proxy) {
 
         String key = buildKey(name, password);
         if (authClientMap.containsKey(key)) {
             return authClientMap.get(key);
         }
 
-        OkHttpClient okHttpClient = buildBasicAuthClient(name, password);
+        OkHttpClient okHttpClient = buildBasicAuthClient(name, password, proxy);
 
         authClientMap.put(key, okHttpClient);
 
         return okHttpClient;
     }
 
-    public static OkHttpClient buildBasicAuthClient(final String name, final String password) {
-        return new OkHttpClient.Builder().readTimeout(100000, TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
+    private static OkHttpClient buildBasicAuthClient(final String name, final String password, boolean proxy) {
+        // return new OkHttpClient.Builder().readTimeout(100000, TimeUnit.MILLISECONDS).authenticator(new Authenticator() {
+        //     @Override
+        //     public Request authenticate(Route route, Response response) throws IOException {
+        //         String credential = Credentials.basic(name, password);
+        //         return response.request().newBuilder().header("Authorization", credential).build();
+        //     }
+        // }).build();
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.readTimeout(100000, TimeUnit.MILLISECONDS);
+        builder.authenticator(new Authenticator() {
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 String credential = Credentials.basic(name, password);
                 return response.request().newBuilder().header("Authorization", credential).build();
             }
-        }).build();
+        });
+
+        if (proxy) {
+            builder.proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080)));
+        }
+
+        return builder.build();
     }
 
     private static String buildKey(String name, String password) {
         return name.concat("-").concat(password);
     }
-
 }
