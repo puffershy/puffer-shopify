@@ -2,11 +2,20 @@ package com.puffer.shopify.common.enums;
 
 public enum ShopifyTagEnum {
 
-
+    /**
+     * 杯子
+     */
+    MUG("mug"),
     /**
      * 新到
      */
-    NEW_ARRIVAL("New Arrival"),
+    QUOTE_MUG("quote mug"),
+
+    SHAPED_MUG("shaped mug"),
+
+    ANIMAL_MUG("animal mug"),
+
+    CHANGING_MUG("chaning mug"),
 
     /**
      * 陶瓷

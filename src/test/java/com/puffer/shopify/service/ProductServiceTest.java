@@ -17,9 +17,10 @@ public class ProductServiceTest extends AbstractTest {
     @Resource
     private ProductDao productDao;
 
+
+
     @Test
     public void testUpdateFromShopify() {
-
         int size = 300;
 
         List<ProductDO> productDOS = productDao.queryList(ProductFlowStateEnum.UPLOAD_SUCCESS.getValue(), size, ProductStateEnum.EFFECTIVE.getValue());
